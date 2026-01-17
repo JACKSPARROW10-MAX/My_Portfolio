@@ -2,18 +2,64 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
+/* ================= MUSIC CONTROL ================= */
+
+const backgroundMusic = document.getElementById('backgroundMusic');
+const musicToggle = document.getElementById('musicToggle');
+let isMusicPlaying = false;
+
+// Initialize music control
+function initializeMusic() {
+  // Set initial volume
+  backgroundMusic.volume = 0.3;
+  
+  // Add click handler for music toggle
+  musicToggle.addEventListener('click', toggleMusic);
+  
+  // Start with muted state to allow autoplay
+  backgroundMusic.muted = true;
+  backgroundMusic.play().then(() => {
+    console.log("Music started muted");
+    // Unmute after first interaction
+    setTimeout(() => {
+      backgroundMusic.muted = false;
+      isMusicPlaying = true;
+      musicToggle.classList.add('playing');
+      musicToggle.textContent = '';
+      console.log("Music unmuted and playing");
+    }, 100);
+  }).catch(error => {
+    console.log("Music autoplay blocked, user interaction required");
+    musicToggle.textContent = '';
+  });
+}
+
+function toggleMusic() {
+  if (isMusicPlaying) {
+    backgroundMusic.pause();
+    musicToggle.textContent = '';
+    musicToggle.textContent = '🔇';
+    musicToggle.classList.remove('playing');
+  } else {
+    backgroundMusic.play();
+    musicToggle.textContent = '🎵';
+    musicToggle.classList.add('playing');
+  }
+  isMusicPlaying = !isMusicPlaying;
+}
+
 /* ================= SCENE SETUP ================= */
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1a1a1a);
 
 const camera = new THREE.PerspectiveCamera(
-  35, // Even tighter FOV for maximum zoom
+  45, // Wider FOV to see more of the room
   window.innerWidth / window.innerHeight,
   0.1,
   100
 );
-camera.position.set(0, 2.2, 4.5); // Much closer to the room
+camera.position.set(0, 1.5, 5); // Lower Y position to center room vertically
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -32,13 +78,9 @@ scene.add(directionalLight);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableZoom = false; // Disable zoom
 controls.enablePan = false; // Disable panning
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.minPolarAngle = Math.PI / 2.8; // Prevent looking too high (no ceiling view)
-controls.maxPolarAngle = Math.PI / 2.2; // Prevent looking too low (no floor view)
-controls.minAzimuthAngle = -Math.PI / 6; // Limited left rotation (-30 degrees)
-controls.maxAzimuthAngle = Math.PI / 5; // More right rotation allowed (36 degrees)
-controls.target.set(0, 1.2, 0); // Look slightly higher in room
+controls.enableRotate = false; // Disable rotation completely
+controls.enableDamping = false; // Disable damping since no rotation
+controls.target.set(0, 0.5, 0); // Look slightly higher to balance the room vertically
 controls.autoRotate = false;
 controls.autoRotateSpeed = 0.5;
 
@@ -48,7 +90,7 @@ let currentView = null; // Track which section is active
 let isAnimating = false; // Prevent clicks during animation
 
 const cameraPositions = {
-  default: { position: { x: 0, y: 2.2, z: 4.5 }, target: { x: 0, y: 1.2, z: 0 } },
+  default: { position: { x: 0, y: 1.5, z: 5 }, target: { x: 0, y: 0.5, z: 0 } },
   about: { position: { x: 1.3, y: 1.3, z: 1.0 }, target: { x: 0.80, y: 0.90, z: 0.00 } },
   books: { position: { x: -0.3, y: 1.9, z: 1.3 }, target: { x: -0.50, y: 1.65, z: 0.40 } },
   future: { position: { x: 0.9, y: 1.6, z: -0.5 }, target: { x: 0.60, y: 1.20, z: -1.15 } }
@@ -139,12 +181,14 @@ function initializeClickPoints() {
   clickPointDefinitions.forEach(def => {
     const point = new ClickPoint(def.name, def.position, def.color, def.description);
     point.addToScene(scene);
+    // Hide spheres by default
+    point.mesh.visible = false;
     clickPoints.push(point);
   });
   
-  console.log("✅ Click points initialized:", clickPoints.length);
+  console.log("✅ Click points initialized (hidden):", clickPoints.length);
   console.log("   Points are:", clickPoints.map(p => p.name).join(", "));
-  console.log("💡 Tip: Hover over the colored spheres and click them!");
+  console.log("💡 Move your mouse over interactive areas to reveal clickable zones");
   console.log("💡 Press T for tuning mode, M to show mesh helpers");
 }
 
@@ -164,7 +208,7 @@ function onMouseMove(event) {
   // Update raycaster
   raycaster.setFromCamera(mouse, camera);
   
-  // Check for intersections with click points
+  // Check for intersections with click points (even if invisible)
   const clickableMeshes = clickPoints.map(p => p.mesh);
   const intersects = raycaster.intersectObjects(clickableMeshes, false);
   
@@ -176,11 +220,13 @@ function onMouseMove(event) {
       // Clear previous hover
       if (hoveredPoint) {
         hoveredPoint.setHovered(false);
+        hoveredPoint.mesh.visible = false;
       }
       
       // Set new hover
       hoveredPoint = newHoveredPoint;
       hoveredPoint.setHovered(true);
+      hoveredPoint.mesh.visible = true;
       
       // Update cursor
       document.body.style.cursor = 'pointer';
@@ -189,6 +235,7 @@ function onMouseMove(event) {
     // No hover
     if (hoveredPoint) {
       hoveredPoint.setHovered(false);
+      hoveredPoint.mesh.visible = false;
       hoveredPoint = null;
       document.body.style.cursor = 'default';
     }
@@ -258,8 +305,9 @@ function hideClickPoints() {
 }
 
 function showClickPoints() {
+  // Keep spheres hidden by default - they will show on hover
   clickPoints.forEach(point => {
-    point.mesh.visible = true;
+    point.mesh.visible = false;
   });
 }
 
@@ -338,11 +386,23 @@ function createUIElements() {
   aboutCard.className = 'info-card';
   aboutCard.innerHTML = `
     <button class="close-btn" onclick="window.returnToDefaultView()">×</button>
-    <h2>About Me</h2>
+    <h2>👋 About Me</h2>
     <div class="card-content">
-      <p>👋 Hi! I'm a creative developer passionate about building immersive 3D experiences.</p>
-      <p>🎨 I combine design thinking with technical expertise to create memorable digital experiences.</p>
-      <p>💡 Always exploring new technologies and pushing the boundaries of web development.</p>
+      <p>Hi, I'm <strong>Prathamesh Salokhe</strong>, a technology enthusiast with a strong interest in building intelligent, structured, and interactive digital systems.</p>
+      
+      <p>I'm currently pursuing <strong>Artificial Intelligence and Data Science</strong>, where I focus on understanding how data, algorithms, and software engineering principles come together to solve complex problems. My technical foundation includes <strong>Java development, Python programming, data analysis, and Generative AI concepts</strong>, with a strong emphasis on clarity, scalability, and clean logic.</p>
+      
+      <p>I have completed a <strong>Hands-on Training and Internship in Generative AI</strong> at <strong>SunBeam Infotech Pvt. Ltd., Pune</strong>, where I earned a <strong>Grade "A"</strong>. During this experience, I gained practical exposure to <strong>Large Language Models (LLMs), API-based integrations, prompt optimization, and Retrieval-Augmented Generation (RAG)</strong>, helping me understand how modern AI systems are designed and connected to real applications.</p>
+      
+      <p>I value <strong>continuous learning, problem-solving, and disciplined thinking</strong>. I enjoy understanding systems deeply rather than memorizing solutions, and I strive to grow by consistently improving my technical and analytical skills.</p>
+      
+      <div style="margin-top: 30px; padding: 20px; background: rgba(139, 69, 19, 0.1); border-radius: 10px; border-left: 4px solid #8b4513;">
+        <p style="margin: 0; font-style: italic; color: #8b4513;">This interactive room reflects my mindset:</p>
+        <p style="margin: 10px 0;">🪑 <strong>The chair represents focus and thoughtful work</strong></p>
+        <p style="margin: 10px 0;">📚 <strong>The books symbolize knowledge and learning</strong></p>
+        <p style="margin: 10px 0;">🪟 <strong>The window reflects vision, curiosity, and future goals</strong></p>
+        <p style="margin: 10px 0 0 0; font-style: italic; color: #8b4513;">I'm motivated by growth, curiosity, and the desire to build meaningful technology.</p>
+      </div>
     </div>
   `;
   document.body.appendChild(aboutCard);
@@ -483,7 +543,7 @@ window.openBook = function(section) {
   // Hide books menu
   booksMenu.classList.remove('visible');
   
-  // Create detailed view
+  // Create detailed view with page turning animation
   let detailPanel = document.getElementById('detail-panel');
   if (!detailPanel) {
     detailPanel = document.createElement('div');
@@ -492,14 +552,80 @@ window.openBook = function(section) {
     document.body.appendChild(detailPanel);
   }
   
-  const content = getBookContent(section);
+  // Start with page turning animation
   detailPanel.innerHTML = `
+    <div class="page-turn-animation">
+      <div class="turning-page left-turn">
+        <div class="page-content-front">
+          <h2>📚 Turning Page...</h2>
+          <div class="page-decoration">✦</div>
+        </div>
+        <div class="page-content-back">
+          <h2>📖 ${section.charAt(0).toUpperCase() + section.slice(1)}</h2>
+          <div class="loading-content">Loading content...</div>
+        </div>
+      </div>
+      <div class="static-page right-page">
+        <div class="chapter-preview">
+          <h3>Chapter Preview</h3>
+          <p>Opening ${section}...</p>
+        </div>
+      </div>
+    </div>
     <button class="close-btn" onclick="window.closeDetailPanel()">×</button>
     <button class="back-btn" onclick="window.backToBooksMenu()">← Back</button>
-    ${content}
   `;
+  
   detailPanel.classList.add('visible');
+  
+  // Simulate page turn and then load content
+  setTimeout(() => {
+    const content = getBookContent(section);
+    detailPanel.innerHTML = `
+      <div class="book-detail-layout">
+        <div class="detail-page left-detail-page">
+          <div class="page-header">
+            <h2>📖 ${section.charAt(0).toUpperCase() + section.slice(1)}</h2>
+            <div class="page-number">Chapter ${getChapterNumber(section)}</div>
+          </div>
+          <div class="page-content">
+            ${content}
+          </div>
+        </div>
+        <div class="detail-page right-detail-page">
+          <div class="page-decoration">
+            <div class="vintage-ornament">✦</div>
+            <div class="page-quote">"${getChapterQuote(section)}"</div>
+            <div class="vintage-ornament">✦</div>
+          </div>
+        </div>
+      </div>
+      <button class="close-btn" onclick="window.closeDetailPanel()">×</button>
+      <button class="back-btn" onclick="window.backToBooksMenu()">← Back</button>
+    `;
+    detailPanel.classList.add('visible');
+  }, 1500); // Page turn animation duration
 };
+
+function getChapterNumber(section) {
+  const chapters = {
+    'projects': '01',
+    'skills': '02', 
+    'experience': '03',
+    'journey': '04'
+  };
+  return chapters[section] || '00';
+}
+
+function getChapterQuote(section) {
+  const quotes = {
+    'projects': 'Innovation distinguishes between a leader and a follower',
+    'skills': 'The expert in anything was once a beginner',
+    'experience': 'Experience is the teacher of all things',
+    'journey': 'The journey of a thousand miles begins with a single step'
+  };
+  return quotes[section] || 'Knowledge is power';
+}
 
 window.closeDetailPanel = function() {
   const detailPanel = document.getElementById('detail-panel');
@@ -603,6 +729,9 @@ loader.load(
     roomModel = gltf.scene;
     scene.add(roomModel);
     console.log("✅ Room model loaded");
+    
+    // Initialize music after room loads
+    initializeMusic();
     
     // Analyze room structure
     analyzeRoomModel(roomModel);
@@ -817,17 +946,35 @@ window.addEventListener('resize', () => {
 /* ================= ANIMATION LOOP ================= */
 
 const clock = new THREE.Clock();
+let roomRotated = false;
 
 function animate() {
   requestAnimationFrame(animate);
   
   const deltaTime = clock.getDelta();
   
+  // Rotate room 45 degrees on first load
+  if (!roomRotated && roomModel) {
+    const rotationSpeed = 0.3; // radians per second
+    const targetRotation = -Math.PI / 4; // -45 degrees (left rotation)
+    
+    if (roomModel.rotation.y > targetRotation) {
+      roomModel.rotation.y -= rotationSpeed * deltaTime;
+      if (roomModel.rotation.y <= targetRotation) {
+        roomModel.rotation.y = targetRotation;
+        roomRotated = true;
+        console.log("🔄 Room rotation completed - -45 degrees (left)");
+      }
+    }
+  }
+  
   // Update click point animations
   clickPoints.forEach(point => point.update(deltaTime));
   
-  // Update controls
-  controls.update();
+  // Update controls (only needed for damping, but we disabled rotation)
+  if (controls.enableDamping) {
+    controls.update();
+  }
   
   // Render scene
   renderer.render(scene, camera);
