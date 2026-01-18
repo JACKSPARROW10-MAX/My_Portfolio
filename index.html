@@ -1,31 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My 3D Portfolio</title>
-
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
-      "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
-    }
-  }
-  </script>
-
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Room | Immersive Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
 <body>
-  <!-- Background Music -->
-  <audio id="backgroundMusic" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-  
-  <!-- Music Control Button -->
-  <button id="musicToggle" class="music-control">🎵</button>
-  
-  <script type="module" src="./main.js"></script>
+
+    <div class="viewport-container">
+        <div class="interactive-stage">
+            <img src="assets/room.gif" alt="Pixel Room" class="bg-asset">
+
+            <div class="hotspot-layer">
+                <div id="hotspot-person" class="sphere-marker"></div>
+                <div id="hotspot-monitor" class="sphere-marker"></div>
+                <div id="hotspot-pc" class="sphere-marker"></div>
+                <div id="hotspot-bonsai" class="sphere-marker"></div>
+                <div id="hotspot-clock" class="sphere-marker"></div>
+                <div id="hotspot-ps5" class="sphere-marker"></div>
+                <div id="hotspot-lavalamp" class="sphere-marker"></div>
+                <div id="hotspot-window" class="sphere-marker"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="popup-overlay" class="overlay">
+        <div id="popup-card" class="popup-box">
+            <div class="scanline"></div>
+            <button class="close-btn">&times;</button>
+            <div class="popup-content">
+                <h2 id="popup-title"></h2>
+                <div class="text-wrapper">
+                    <p id="popup-text"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="objects/person.js"></script>
+    <script src="objects/monitor.js"></script>
+    <script src="objects/pc.js"></script>
+    <script src="objects/bonsai.js"></script>
+    <script src="objects/clock.js"></script>
+    <script src="objects/ps5.js"></script>
+    <script src="objects/lavalamp.js"></script>
+    <script src="objects/window.js"></script>
 </body>
 </html>
