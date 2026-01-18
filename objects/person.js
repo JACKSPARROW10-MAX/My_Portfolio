@@ -1,28 +1,37 @@
 /**
- * Object: About Me (Person)
- * Theme: Identity Log (theme-person)
- * Logic: Extends App and Transitions components
+ * Object: Person (The Architect)
+ * World: Identity Log
  */
 document.getElementById('hotspot-person').addEventListener('click', () => {
-    // 1. Identity narration trigger
+    // 1. Play identity narration
     App.playAudio('person.mp3');
     
-    // 2. Cinematic zoom into the character center
+    // 2. Trigger the cinematic zoom defined in transitions.js
     Transitions.zoomToObject('person', () => {
-        // 3. Render the personal story world
+        // 3. Render the Identity Card inside the popup
         Popup.render(`
-            <div class="world-content">
-                <h1 style="color:var(--p-accent); letter-spacing:4px;">THE ARCHITECT</h1>
-                <p style="margin-top:20px; font-size:1.2rem; color:var(--p-accent);">User-01 Detected.</p>
-                <p style="margin-top:15px;">
-                    I am a frontend engineer dedicated to building high-fidelity simulations where 
-                    logic meets cinematic design. Most nights, you will find me right here—turning 
-                    complex technical problems into seamless, interactive user journeys.
-                </p>
-                <p style="margin-top:10px; opacity:0.8;">
-                    Welcome to my simulation. Feel free to explore the objects in this room to 
-                    learn more about my stack and my story.
-                </p>
+            <div class="terminal-world">
+                <div class="terminal-header">
+                    <span class="status-dot"></span>
+                    <h1 class="terminal-title">IDENTITY_LOG // ARCHITECT</h1>
+                </div>
+                
+                <div class="terminal-body">
+                    <p class="status-code">STATUS: ONLINE // USER_01</p>
+                    <p style="margin-top:15px; line-height:1.8;">
+                        Hello, I am the developer behind this simulation. I specialize in 
+                        creating high-fidelity, interactive web environments. 
+                        I have prepared this room to guide you through my creative journey.
+                    </p>
+                </div>
+
+                <div class="console-nav" style="margin-top:30px;">
+                    <button class="glass-btn" onclick="window.location.href='about-me.html'">
+                        <span class="btn-id">ID</span>
+                        <span class="btn-label">VIEW FULL BIO</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </div>
             </div>
         `);
     });
