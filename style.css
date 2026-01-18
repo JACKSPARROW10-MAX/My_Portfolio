@@ -1,156 +1,240 @@
 :root {
-    --sphere-size: 24px;
-    --p-accent: #5ce1e6;
-    --p-bg: rgba(10, 10, 18, 0.98);
+    --accent: #5ce1e6;
+    --glass: rgba(10, 10, 15, 0.95);
+    --sphere-size: 40px; /* Base size for hotspots */
 }
-
-/* World Themes - Dynamic Skinning */
-.theme-person   { --p-accent: #ff79c6; }
-.theme-monitor  { --p-accent: #50fa7b; }
-.theme-pc       { --p-accent: #8be9fd; }
-.theme-bonsai   { --p-accent: #f1fa8c; }
-.theme-clock    { --p-accent: #ffb86c; }
-.theme-ps5      { --p-accent: #bd93f9; }
-.theme-lavalamp { --p-accent: #ff5555; }
-.theme-window   { --p-accent: #f8f8f2; }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+body, html { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: 'Inter', sans-serif; color: #fff; }
 
-body, html {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #000;
-    font-family: 'Courier New', Courier, monospace;
-}
-
-.viewport-container {
-    width: 100vw;
-    height: 100vh;
+.viewport { 
+    width: 100vw; 
+    height: 100vh; 
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #000;
+    perspective: 1000px; 
 }
 
-.interactive-stage {
+/* THE STAGE: Maintain 16:9 ratio to match room.gif precisely */
+.scene-wrapper { 
     position: relative;
     width: 100%;
     height: 100%;
+    max-width: 177.78vh; /* 16:9 logic */
+    max-height: 56.25vw;
     aspect-ratio: 16 / 9;
-    max-width: 100vw;
-    max-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    transform-origin: center center; 
 }
 
-.bg-asset {
-    width: 100%;
-    height: 100%;
+.media-container, .media-bg { 
+    position: absolute; 
+    inset: 0; 
+    width: 100%; 
+    height: 100%; 
     object-fit: contain; 
-    display: block;
-    image-rendering: pixelated; /* Keeps pixel art sharp */
 }
 
-.hotspot-layer {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    pointer-events: none;
+.hotspot-layer { 
+    position: absolute; 
+    inset: 0; 
+    z-index: 10; 
 }
 
-.sphere-marker {
-    position: absolute;
+/* VISIBLE CLICKPOINTS (Hotspots) */
+.hotspot { 
+    position: absolute; 
+    cursor: pointer; 
     width: var(--sphere-size);
     height: var(--sphere-size);
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid white;
     border-radius: 50%;
-    cursor: pointer;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-    transition: all 0.3s ease;
-    pointer-events: auto;
+    transform: translate(-50%, -50%); /* Centers the sphere on the coordinate */
+    
+    /* Debug/Visual Style */
+    background: rgba(92, 225, 230, 0.3); 
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 15px var(--accent);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.sphere-marker:hover {
-    background: white;
+.hotspot:hover {
+    background: rgba(255, 255, 255, 0.5);
     transform: translate(-50%, -50%) scale(1.3);
-    box-shadow: 0 0 25px white;
+    box-shadow: 0 0 25px #fff;
 }
 
-/* Coordinates locked to the 16:9 stage */
-#hotspot-person   { top: 62%; left: 47%; }
-#hotspot-monitor  { top: 44%; left: 53%; }
-#hotspot-pc       { top: 62%; left: 69%; }
-#hotspot-bonsai   { top: 52%; left: 79%; }
+/* PIXEL-PERFECT COORDINATES FOR 16:9 GIF */
+#hotspot-person   { top: 58%; left: 47%; }
+#hotspot-monitor  { top: 48%; left: 53%; }
+#hotspot-pc       { top: 60%; left: 71%; }
+#hotspot-bonsai   { top: 55%; left: 79%; }
 #hotspot-clock    { top: 25%; left: 58%; }
-#hotspot-ps5      { top: 18%; left: 69%; }
-#hotspot-lavalamp { top: 65%; left: 91%; }
-#hotspot-window   { top: 38%; left: 18%; }
+#hotspot-ps5      { top: 18%; left: 70%; }
+#hotspot-lavalamp { top: 68%; left: 95%; }
+#hotspot-window   { top: 35%; left: 15%; }
 
-.overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(10px);
+/* UI Layer Styling */
+.ui-layer {
+    position: fixed; inset: 0; z-index: 100; opacity: 0; pointer-events: none;
+    background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center;
+}
+.ui-layer.active { opacity: 1; pointer-events: auto; }
+
+.content-container {
+    width: 85%; max-width: 800px; padding: 50px; background: var(--glass);
+    border-radius: 20px; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);
+}
+
+.back-btn {
+    position: absolute; top: 40px; left: 40px; padding: 12px 24px;
+    background: var(--glass); border: 1px solid var(--accent); color: #fff;
+    cursor: pointer; z-index: 110; border-radius: 50px;
+}
+
+
+/* Terminal UI Enhancements */
+.terminal-world {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.terminal-header {
+    display: flex;
     align-items: center;
-    opacity: 0;
-    visibility: hidden;
-    z-index: 100;
-    transition: 0.4s ease;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
 }
 
-.overlay.active { opacity: 1; visibility: visible; }
+.status-dot {
+    width: 10px;
+    height: 10px;
+    background: var(--p-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--p-accent);
+    animation: pulse 2s infinite;
+}
 
-.popup-box {
-    background: var(--p-bg);
-    border: 1px solid var(--p-accent);
-    padding: 3rem;
-    width: 90%;
-    max-width: 500px;
+.terminal-title {
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    opacity: 0.7;
+}
+
+.console-nav {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* The Improved Glass Button */
+.glass-btn {
     position: relative;
-    box-shadow: 0 0 50px rgba(0,0,0,1), inset 0 0 20px var(--p-accent);
-}
-
-.scanline {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.05) 51%);
-    background-size: 100% 4px;
-    pointer-events: none;
-    opacity: 0.3;
-}
-
-.popup-content h2 {
-    color: var(--p-accent);
-    text-transform: uppercase;
-    letter-spacing: 5px;
-    margin-bottom: 20px;
-}
-
-.popup-content p {
-    color: #f0f0f0;
-    font-size: 1.1rem;
-    line-height: 1.7;
-    border-left: 3px solid var(--p-accent);
-    padding-left: 20px;
-}
-
-.close-btn {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    padding: 18px 25px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
     cursor: pointer;
+    overflow: hidden;
+    text-align: left;
+    text-decoration: none;
+    transition: border 0.3s;
+}
+
+.glass-btn:hover {
+    border-color: var(--p-accent);
+}
+
+.btn-id {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--p-accent);
+    margin-right: 15px;
+    opacity: 0.6;
+}
+
+.btn-label {
+    font-size: 1rem;
+    letter-spacing: 2px;
+    font-weight: 500;
+}
+
+.btn-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(92, 225, 230, 0.1), transparent);
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+/* Leaf Button Styling */
+.leaf-btn {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--p-accent);
+    transition: 0.3s;
+}
+
+.leaf-icon {
+    width: 60px;
+    height: 60px;
+    fill: greenyellow;
+    filter: drop-shadow(0 0 5px var(--p-accent));
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.leaf-btn:hover .leaf-icon {
+    transform: rotate(-15deg) scale(1.2);
+    fill: #fff;
+    filter: drop-shadow(0 0 15px #fff);
+}
+
+/* PS5 Icon Navigation */
+.icon-nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #fff;
+    opacity: 0.7;
+    transition: 0.3s;
+}
+
+.svg-icon {
+    width: 50px;
+    height: 50px;
+    fill: #fff;
+    transition: 0.3s;
+}
+
+.icon-nav-btn:hover {
+    opacity: 1;
+    transform: translateY(-5px);
+    color: var(--p-accent);
+}
+
+.icon-nav-btn:hover .svg-icon {
+    fill: var(--p-accent);
+    filter: drop-shadow(0 0 10px var(--p-accent));
+}
+
+.icon-nav-btn span {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
 }
