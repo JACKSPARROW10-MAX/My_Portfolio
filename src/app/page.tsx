@@ -100,48 +100,81 @@ export default function Home() {
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] mix-blend-screen animate-pulse-glow" />
             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-[120px] mix-blend-screen animate-pulse-glow" style={{ animationDelay: '2s' }} />
+            {/* Additional animated gradient orb for premium feel */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-500/5 rounded-full blur-[150px] mix-blend-screen animate-pulse-glow" style={{ animationDelay: '1s' }} />
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto w-full">
+          <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto w-full relative z-10">
             <motion.div 
               initial={{ x: -50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 1, ease: "easeOut" }}
-              className="flex flex-col gap-8"
+              className="flex flex-col gap-6 relative"
             >
-              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 w-fit">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                </span>
-                <span className="text-xs tracking-widest text-primary-light font-medium">AVAILABLE FOR WORK</span>
+              {/* Spotlight behind text */}
+              <div className="absolute -inset-x-20 -inset-y-20 bg-primary/5 blur-[100px] rounded-full pointer-events-none -z-10" />
+
+              {/* Micro-label */}
+              <div className="text-sm tracking-[0.4em] text-primary-light/80 font-bold uppercase">
+                AI • DATA • CLOUD
+              </div>
+
+              {/* Role Chips */}
+              <div className="flex flex-wrap gap-3">
+                {["GenAI Engineer", "Data Analyst", "AWS Cloud", "Open to Work"].map((role, idx) => (
+                  <div key={idx} className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-medium shadow-sm ${
+                    role === "Open to Work" 
+                      ? "border-green-500/30 bg-green-500/10 text-green-400"
+                      : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10 transition-colors"
+                  }`}>
+                    {role === "Open to Work" && (
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                      </span>
+                    )}
+                    {role}
+                  </div>
+                ))}
               </div>
               
-              <h1 className="font-serif text-6xl lg:text-8xl leading-[1.1] font-bold">
-                <span className="block text-foreground">Generative AI</span>
-                <span className="block text-gradient mt-2">Specialist</span>
+              <h1 className="font-serif text-5xl lg:text-7xl leading-[1.15] font-bold relative mt-2">
+                <span className="block text-white drop-shadow-sm">Building AI Systems for</span>
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-secondary mt-2 relative">
+                  Intelligence, Insight & Scale
+                  <span className="absolute inset-0 bg-gradient-to-r from-primary to-secondary blur-[30px] opacity-30 -z-10"></span>
+                </span>
               </h1>
-              <p className="text-white/60 text-lg lg:text-xl max-w-lg font-light leading-relaxed">
-                Architecting intelligent systems through RAG, Large Language Models, and automated data pipelines to build the next generation of AI.
+              
+              <p className="text-white/70 text-lg lg:text-xl max-w-xl font-light leading-relaxed mt-2">
+                Blending Generative AI, analytics, and cloud engineering to build intelligent systems that scale from insight to production.
               </p>
               
-              <div className="flex items-center gap-6 mt-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 mt-4">
                 <motion.a 
                   href="#projects"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-medium rounded-full flex items-center gap-2 shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow"
+                  className="px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-semibold rounded-full flex items-center gap-2 shadow-[0_0_20px_rgba(139,92,246,0.3)] hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] transition-all"
                 >
-                  Explore Work <ChevronRight size={18} />
+                  View Projects <ChevronRight size={18} />
                 </motion.a>
                 <motion.a 
-                  href="#contact"
+                  href="/resume.pdf"
+                  target="_blank"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 glass-panel text-white font-medium flex items-center gap-2 hover:text-primary-light transition-colors"
+                  className="px-8 py-4 bg-[#0a0a0a]/50 backdrop-blur-md border border-white/10 text-white font-medium rounded-full flex items-center gap-2 hover:bg-white/10 hover:border-primary/50 hover:shadow-[0_0_20px_rgba(139,92,246,0.2)] transition-all"
                 >
-                  Contact Me
+                  Download Resume
                 </motion.a>
+              </div>
+
+              {/* Trust Indicator Row */}
+              <div className="pt-6 border-t border-white/10 mt-4">
+                <p className="text-xs sm:text-sm font-medium text-white/40 tracking-[0.15em] sm:tracking-[0.2em] uppercase">
+                  RAG Systems • Data Pipelines • Analytics Dashboards • Cloud Workflows
+                </p>
               </div>
             </motion.div>
 
@@ -149,24 +182,52 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.2 }}
-              className="relative w-full max-w-[400px] mx-auto lg:ml-auto group animate-float"
+              className="relative w-full max-w-[420px] mx-auto lg:ml-auto group animate-float"
             >
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-secondary/30 blur-[60px] rounded-full group-hover:scale-110 transition-transform duration-700" />
-              <div className="relative aspect-[4/5] w-full glass p-2 rounded-3xl overflow-hidden">
-                <div className="relative w-full h-full rounded-2xl overflow-hidden">
+              {/* Soft floating ambient glow */}
+              <div className="absolute -inset-8 bg-gradient-to-tr from-primary/20 via-purple-500/10 to-secondary/20 blur-[80px] rounded-full group-hover:scale-110 group-hover:opacity-100 opacity-60 transition-all duration-700 -z-10" />
+              
+              <div className="relative w-full glass p-4 rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)] bg-[#111111]/40 backdrop-blur-2xl">
+                {/* Glow border inner */}
+                <div className="absolute inset-0 rounded-[2rem] border border-white/5 mix-blend-overlay pointer-events-none" />
+                
+                <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden mb-4 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
                   <Image 
                     src="/assets/portrait.png" 
                     alt="Prathamesh Salokhe" 
                     fill 
                     sizes="(max-width: 768px) 100vw, 400px"
-                    className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-110"
+                    className="object-cover opacity-90 transition-transform duration-700 group-hover:scale-105"
                     priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  <div className="absolute bottom-6 left-6">
-                    <div className="text-xl font-serif font-bold text-white">Prathamesh Salokhe</div>
-                    <div className="text-sm text-primary-light">AI & Data Science Undergrad</div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/30 to-transparent" />
+                  <div className="absolute bottom-5 left-5 right-5">
+                    <div className="text-2xl font-serif font-bold text-white tracking-wide">Prathamesh Salokhe</div>
+                    <div className="text-sm text-primary-light/90 font-medium mt-1">AI & Data Science Undergrad</div>
                   </div>
+                </div>
+
+                {/* Mini Stats Row */}
+                <div className="grid grid-cols-3 gap-3 mb-4">
+                  {[
+                    { label: "Projects", val: "5+" },
+                    { label: "Intern", val: "GenAI" },
+                    { label: "Certified", val: "AWS" },
+                  ].map((stat, i) => (
+                    <div key={i} className="flex flex-col items-center justify-center py-2 px-1 bg-white/[0.03] rounded-xl border border-white/5 hover:bg-white/[0.05] transition-colors">
+                      <span className="text-white font-bold text-sm tracking-wide">{stat.val}</span>
+                      <span className="text-white/40 text-[10px] uppercase tracking-wider mt-1">{stat.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Skill Pills */}
+                <div className="flex flex-wrap justify-center gap-2">
+                  {["RAG", "SQL", "AWS", "Power BI"].map((skill, i) => (
+                    <div key={i} className="px-3 py-1.5 bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 rounded-lg text-xs font-medium text-white/80 hover:border-primary/40 transition-colors">
+                      {skill}
+                    </div>
+                  ))}
                 </div>
               </div>
             </motion.div>
