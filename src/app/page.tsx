@@ -43,13 +43,20 @@ const Navbar = () => {
           {["HOME", "ABOUT", "PROJECTS", "EXPERIENCE", "CONTACT"].map((item) => (
             <motion.a
               key={item}
-              href={`#${item.toLowerCase()}`}
+              href={item === "HOME" ? "/" : `/#${item.toLowerCase()}`}
               whileHover={{ color: "#fff" }}
               className="hover:text-primary-light transition-colors cursor-pointer"
             >
               {item}
             </motion.a>
           ))}
+          <motion.a
+            href="/gallery"
+            whileHover={{ color: "#fff" }}
+            className="hover:text-primary-light transition-colors cursor-pointer"
+          >
+            GALLERY
+          </motion.a>
         </div>
       </div>
     </motion.nav>
@@ -160,7 +167,8 @@ export default function Home() {
                   View Projects <ChevronRight size={18} />
                 </motion.a>
                 <motion.a 
-                  href="/resume.pdf"
+                  href="/assets/Prathamesh_Salokhe_Resume_DCT.pdf"
+                  download="Prathamesh_Salokhe_Resume.pdf"
                   target="_blank"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -443,6 +451,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+
       </main>
 
       {/* Footer / Contact */}
