@@ -236,33 +236,52 @@ export default function Home() {
 
         {/* About Section */}
         <section id="about" className="py-32 px-8 relative">
-          <div className="max-w-7xl mx-auto">
+          {/* Subtle ambient gradient lighting in the background */}
+          <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary/10 rounded-full blur-[150px] pointer-events-none" />
+          <div className="absolute top-1/2 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-[150px] pointer-events-none" />
+
+          <div className="max-w-7xl mx-auto relative z-10">
             <div className="flex items-center gap-6 mb-16">
-              <h2 className="text-sm tracking-[0.5em] text-primary-light font-semibold uppercase">About Me</h2>
-              <div className="h-px bg-gradient-to-r from-primary/50 to-transparent flex-1" />
+              <h2 className="text-xs tracking-[0.4em] text-primary-light/80 font-bold uppercase drop-shadow-sm">About Me</h2>
+              <div className="h-[1px] bg-gradient-to-r from-primary/40 via-purple-500/20 to-transparent flex-1 shadow-[0_0_10px_rgba(139,92,246,0.3)]" />
             </div>
             
-            <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="grid lg:grid-cols-2 gap-20 items-start">
               <motion.div 
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
-                className="space-y-8"
+                className="space-y-10 relative"
               >
-                <h3 className="font-serif text-4xl lg:text-5xl leading-tight font-medium text-foreground">
-                  Transforming Data into <br/> <span className="text-gradient">Intelligent Solutions</span>
+                {/* Soft radial glow behind heading */}
+                <div className="absolute -top-10 -left-10 w-64 h-64 bg-primary/5 blur-[80px] rounded-full pointer-events-none -z-10" />
+
+                <h3 className="font-serif text-4xl lg:text-5xl leading-[1.15] font-bold text-white drop-shadow-sm">
+                  Engineering Intelligence <br/> 
+                  <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-secondary relative">
+                    from Data
+                    <span className="absolute inset-0 bg-gradient-to-r from-primary to-secondary blur-[20px] opacity-20 -z-10"></span>
+                  </span>
                 </h3>
-                <p className="text-white/60 text-lg leading-relaxed font-light">
-                  I am an AI & Data Science undergraduate specializing in Generative AI and machine learning. My passion lies in bridging the gap between raw data and actionable insights. I focus on building <span className="text-primary-light font-medium">RAG (Retrieval-Augmented Generation) systems</span> and automated data pipelines that empower applications with context-aware intelligence.
+                
+                <p className="text-white/70 text-lg leading-relaxed font-light max-w-lg tracking-wide">
+                  I’m an AI & Data Science undergraduate focused on building intelligent systems through Generative AI, analytics, and scalable backend architecture. I specialize in transforming raw data into production-ready solutions using RAG pipelines, automation workflows, and cloud-native engineering.
                 </p>
-                <div className="pt-4 flex gap-4">
-                  <div className="p-4 glass-panel flex-1 text-center group">
-                    <div className="text-3xl font-bold text-gradient mb-2 group-hover:scale-110 transition-transform">10+</div>
-                    <div className="text-xs tracking-widest text-white/50 uppercase">Projects Delivered</div>
+                
+                <div className="pt-4 flex flex-col sm:flex-row gap-6">
+                  <div className="relative group flex-1">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-2xl blur-sm opacity-50 group-hover:opacity-100 transition duration-500"></div>
+                    <div className="relative p-6 bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/10 rounded-2xl text-center group-hover:bg-[#111111]/80 transition-colors shadow-lg">
+                      <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400 mb-2 group-hover:scale-105 transition-transform duration-300">10+</div>
+                      <div className="text-[10px] tracking-[0.2em] text-white/40 uppercase font-medium">Projects Built</div>
+                    </div>
                   </div>
-                  <div className="p-4 glass-panel flex-1 text-center group">
-                    <div className="text-3xl font-bold text-gradient mb-2 group-hover:scale-110 transition-transform">2+</div>
-                    <div className="text-xs tracking-widest text-white/50 uppercase">Years Exp</div>
+                  <div className="relative group flex-1">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-secondary/30 to-primary/30 rounded-2xl blur-sm opacity-50 group-hover:opacity-100 transition duration-500"></div>
+                    <div className="relative p-6 bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/10 rounded-2xl text-center group-hover:bg-[#111111]/80 transition-colors shadow-lg">
+                      <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-secondary to-purple-400 mb-2 group-hover:scale-105 transition-transform duration-300">2+</div>
+                      <div className="text-[10px] tracking-[0.2em] text-white/40 uppercase font-medium">Years Experience</div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -271,21 +290,30 @@ export default function Home() {
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
-                className="grid grid-cols-2 gap-4"
+                className="grid sm:grid-cols-2 gap-6 relative"
               >
+                {/* Soft radial glow behind cards */}
+                <div className="absolute inset-0 bg-secondary/5 blur-[100px] rounded-full pointer-events-none -z-10" />
+
                 {[
-                  { icon: BrainCircuit, title: "Gen AI & LLMs", desc: "RAG, Prompt Engineering, Fine-tuning" },
-                  { icon: Database, title: "Data Pipelines", desc: "Automated ETL, Selenium, Scraping" },
-                  { icon: Code2, title: "Backend", desc: "Python, FastAPI, REST APIs" },
-                  { icon: Terminal, title: "Core Tech", desc: "Java, SQL, React, Next.js" }
+                  { icon: BrainCircuit, title: "Generative AI", desc: "RAG Systems, Prompt Engineering, Fine-Tuning" },
+                  { icon: Database, title: "Data Engineering", desc: "ETL Pipelines, Automation, Web Scraping", offset: "sm:translate-y-8" },
+                  { icon: Code2, title: "Backend Systems", desc: "Python, FastAPI, REST APIs" },
+                  { icon: Terminal, title: "Cloud & Analytics", desc: "AWS, SQL, Power BI, Dashboards", offset: "sm:translate-y-8" }
                 ].map((skill, i) => (
-                  <div key={i} className="p-6 glass-panel flex flex-col gap-4 group">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                      <skill.icon size={24} />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white mb-1">{skill.title}</h4>
-                      <p className="text-sm text-white/50">{skill.desc}</p>
+                  <div key={i} className={`group relative ${skill.offset || ""}`}>
+                    {/* Hover glow shadow */}
+                    <div className="absolute -inset-0.5 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500" />
+                    
+                    <div className="relative h-full p-6 bg-[#111111]/40 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col gap-5 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.5)] group-hover:-translate-y-1 transition-all duration-300">
+                      {/* Premium icon container */}
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-purple-500/10 border border-primary/20 flex items-center justify-center text-primary-light group-hover:from-primary/30 group-hover:to-purple-500/20 group-hover:text-white transition-all duration-300 shadow-[inset_0_0_20px_rgba(139,92,246,0.1)]">
+                        <skill.icon size={26} className="drop-shadow-md" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-white tracking-wide mb-1.5">{skill.title}</h4>
+                        <p className="text-xs text-white/50 leading-relaxed">{skill.desc}</p>
+                      </div>
                     </div>
                   </div>
                 ))}
