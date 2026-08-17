@@ -3,9 +3,9 @@
 Place your generated anime artwork, real photographs, and audio recordings in these directories:
 
 ## 1. Anime Artwork (`images/first-year/`)
-- `admission.webp` — Rainy admission day, college building, backpack
-- `beginning.webp` — Classroom/college setting, adjusting to college life
-- `friends.webp` — Group of new college friends laughing together
+- `admission.png` — Rainy admission day, college building, backpack
+- `beginning.png` — Classroom/college setting, adjusting to college life
+- `friends.png` — Group of new college friends laughing together
 - `gaming.webp` — Gaming session with friends (PC/Mobile/Controllers)
 - `learning.webp` — Character at desk studying code & technology
 - `idea-lab.webp` — Team designing "AI Matrix Light for Vehicles" project
