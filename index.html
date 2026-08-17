@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prathamesh Salokhe — Personal Portfolio</title>
+  <meta name="description" content="Cinematic anime autobiography & professional developer portfolio of Prathamesh Salokhe." />
+  
+  <!-- GSAP Animation Library CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  
+  <!-- Styling -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-[#050608] text-white antialiased selection:bg-indigo-500/30 selection:text-indigo-300 min-h-screen overflow-x-hidden">
+
+  <!-- Application Mount Node -->
+  <div id="app" class="relative min-h-screen w-full">
+    
+    <!-- Landing Page State Container -->
+    <div id="landing-page" class="relative flex flex-col items-center justify-center min-h-screen p-6 text-center z-10">
+      
+      <!-- Background Ambient Glow -->
+      <div class="absolute inset-0 z-0 pointer-events-none flex items-center justify-center overflow-hidden">
+        <div class="w-[600px] h-[600px] rounded-full bg-indigo-600/10 blur-[120px] animate-pulse"></div>
+        <div class="w-[500px] h-[500px] rounded-full bg-pink-600/10 blur-[100px] animate-pulse delay-1000"></div>
+      </div>
+
+      <!-- Hero Header -->
+      <div class="relative z-10 max-w-2xl space-y-4 mb-14">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-white/10 text-indigo-300 text-xs font-mono tracking-widest uppercase mb-2">
+          ✨ Welcome to My Portfolio
+        </div>
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight bg-gradient-to-r from-white via-neutral-200 to-neutral-400 bg-clip-text text-transparent">
+          PRATHAMESH SALOKHE
+        </h1>
+        <p class="text-lg md:text-xl text-neutral-400 font-light tracking-wide">
+          "Every journey has a story. Here's mine."
+        </p>
+      </div>
+
+      <!-- Two Mode Choice Cards -->
+      <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl px-4">
+        
+        <!-- Mode 1: Listen & Auto Explore -->
+        <button id="btn-auto-explore" class="group relative text-left glass-card p-8 rounded-3xl transition-all duration-500 cursor-pointer overflow-hidden flex flex-col justify-between h-[280px]">
+          <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-gradient-to-br from-indigo-500/20 to-rose-500/20 rounded-full blur-2xl group-hover:scale-150 transition-all duration-700"></div>
+          
+          <div class="space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-3xl group-hover:scale-110 group-hover:bg-indigo-500/20 transition-all">
+              🎧
+            </div>
+            <div>
+              <div class="text-xs uppercase tracking-widest text-indigo-400 font-bold mb-1">CINEMATIC EXPERIENCE</div>
+              <h2 class="text-2xl font-bold text-white group-hover:text-indigo-300 transition-colors">LISTEN & AUTO EXPLORE</h2>
+            </div>
+            <p class="text-sm text-neutral-400 font-light leading-relaxed">
+              "Sit back. I'll tell you my story."
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-400 group-hover:translate-x-2 transition-transform">
+            <span>Start Story</span>
+            <span>→</span>
+          </div>
+        </button>
+
+        <!-- Mode 2: Manual Explore -->
+        <button id="btn-manual-explore" class="group relative text-left glass-card p-8 rounded-3xl transition-all duration-500 cursor-pointer overflow-hidden flex flex-col justify-between h-[280px]">
+          <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-gradient-to-br from-pink-500/20 to-teal-500/20 rounded-full blur-2xl group-hover:scale-150 transition-all duration-700"></div>
+          
+          <div class="space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-3xl group-hover:scale-110 group-hover:bg-pink-500/20 transition-all">
+              🖱
+            </div>
+            <div>
+              <div class="text-xs uppercase tracking-widest text-pink-400 font-bold mb-1">RECRUITER & PROFESSIONAL</div>
+              <h2 class="text-2xl font-bold text-white group-hover:text-pink-300 transition-colors">MANUAL EXPLORE</h2>
+            </div>
+            <p class="text-sm text-neutral-400 font-light leading-relaxed">
+              "Explore my portfolio yourself."
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-pink-400 group-hover:translate-x-2 transition-transform">
+            <span>Open Portfolio</span>
+            <span>→</span>
+          </div>
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- View Containers for Active Modes -->
+    <div id="auto-explore-container" class="hidden absolute inset-0 z-20"></div>
+    <div id="manual-container" class="hidden relative z-20"></div>
+
+  </div>
+
+  <!-- Entry Script -->
+  <script type="module" src="main.js"></script>
+</body>
+</html>
