@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', sans-serif;
   --font-cinzel: 'Cinzel', serif;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #050608;
+  background-color: #030407;
   color: #f3f4f6;
   overflow-x: hidden;
   margin: 0;
@@ -15,25 +15,99 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Glassmorphism Styles */
+/* Premium Glassmorphism Styles */
 .glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(18, 22, 36, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-card {
-  background: rgba(15, 17, 26, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  background: rgba(18, 22, 38, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-  border-color: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 25px 60px rgba(99, 102, 241, 0.2);
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 25px 60px rgba(168, 85, 247, 0.25), 0 0 35px rgba(99, 102, 241, 0.2);
+  transform: translateY(-4px);
+}
+
+.landing-card-purple {
+  background: linear-gradient(135deg, rgba(30, 27, 60, 0.85) 0%, rgba(18, 16, 38, 0.9) 100%);
+  border: 1.5px solid rgba(168, 85, 247, 0.35);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 1px 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.landing-card-purple:hover {
+  border-color: rgba(236, 72, 153, 0.7);
+  box-shadow: 0 20px 45px rgba(236, 72, 153, 0.3), 0 0 30px rgba(168, 85, 247, 0.3);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.landing-card-indigo {
+  background: linear-gradient(135deg, rgba(24, 28, 55, 0.85) 0%, rgba(15, 17, 36, 0.9) 100%);
+  border: 1.5px solid rgba(99, 102, 241, 0.35);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 1px 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.landing-card-indigo:hover {
+  border-color: rgba(99, 102, 241, 0.7);
+  box-shadow: 0 20px 45px rgba(99, 102, 241, 0.3), 0 0 30px rgba(129, 140, 248, 0.3);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.glass-card-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.8), rgba(236, 72, 153, 0.8), transparent);
+  opacity: 0.6;
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.25s ease;
+}
+
+.glass-pill:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #ffffff;
+}
+
+/* Gradient Text Shimmers */
+.gradient-text-primary {
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-accent {
+  background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Story Line Subtitles */
@@ -67,18 +141,186 @@ body {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #06070a;
+  background: #473e87;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #262936;
+  background: #8b82d7;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6366f1;
+  background: #b5aef5;
 }
+
+/* ==========================================
+   LAVENDER NEUMORPHIC CLAY THEME (IMAGE BASED)
+   ========================================== */
+
+.theme-lavender-bg {
+  background: linear-gradient(180deg, #5b52a3 0%, #4d4493 100%);
+  color: #ffffff;
+}
+
+/* Main Outer Clay Panel Container */
+.clay-panel {
+  background: #736abf;
+  border: 2px solid rgba(188, 181, 250, 0.45);
+  border-radius: 2.25rem;
+  box-shadow: 
+    0 20px 40px rgba(35, 27, 78, 0.35),
+    inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.4),
+    inset -1.5px -1.5px 3px rgba(35, 27, 78, 0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.clay-panel:hover {
+  box-shadow: 
+    0 25px 50px rgba(35, 27, 78, 0.45),
+    inset 2px 2px 3px rgba(255, 255, 255, 0.5);
+}
+
+/* Inner Light Purple / White Inset Card */
+.clay-inner-card {
+  background: #eae6ff;
+  color: #272052;
+  border-radius: 1.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 
+    0 8px 24px rgba(35, 27, 78, 0.12),
+    inset 1px 1px 3px rgba(255, 255, 255, 0.9),
+    inset -1px -1px 3px rgba(39, 32, 82, 0.08);
+}
+
+.clay-inner-card-dark {
+  background: #6259ac;
+  color: #ffffff;
+  border-radius: 1.75rem;
+  border: 1.5px solid rgba(188, 181, 250, 0.35);
+  box-shadow: 
+    0 8px 24px rgba(35, 27, 78, 0.25),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.25);
+}
+
+/* Pill Search Bar */
+.clay-search-bar {
+  background: #736abf;
+  border: 2px solid rgba(188, 181, 250, 0.4);
+  border-radius: 9999px;
+  box-shadow: 
+    inset 2px 2px 6px rgba(35, 27, 78, 0.3),
+    0 4px 12px rgba(35, 27, 78, 0.2);
+  color: #ffffff;
+}
+
+.clay-search-bar input {
+  color: #ffffff;
+}
+
+.clay-search-bar input::placeholder {
+  color: #c4bdff;
+}
+
+/* Folder Tab Header Notch Cutout */
+.folder-tab-badge {
+  background: #6259ac;
+  border: 1.5px solid rgba(188, 181, 250, 0.4);
+  border-bottom: none;
+  border-top-left-radius: 1.25rem;
+  border-top-right-radius: 1.25rem;
+  box-shadow: 0 -4px 12px rgba(35, 27, 78, 0.15);
+}
+
+/* Neumorphic Pill Buttons */
+.clay-pill-btn {
+  background: #eae6ff;
+  color: #342a68;
+  border-radius: 9999px;
+  font-weight: 700;
+  border: 1px solid #ffffff;
+  box-shadow: 
+    0 6px 16px rgba(35, 27, 78, 0.2),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.8);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.clay-pill-btn:hover {
+  background: #ffffff;
+  color: #1d1645;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 22px rgba(35, 27, 78, 0.28),
+    inset 1px 1px 3px rgba(255, 255, 255, 1);
+}
+
+.clay-pill-btn-purple {
+  background: #473e88;
+  color: #ffffff;
+  border-radius: 9999px;
+  font-weight: 700;
+  border: 1.5px solid rgba(188, 181, 250, 0.4);
+  box-shadow: 
+    0 6px 16px rgba(35, 27, 78, 0.25),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+.clay-pill-btn-purple:hover {
+  background: #564c9d;
+  box-shadow: 0 8px 20px rgba(35, 27, 78, 0.35);
+  transform: translateY(-2px);
+}
+
+/* Floating Navigation Dock Header */
+.clay-nav-dock {
+  background: #736abf;
+  border: 2px solid rgba(188, 181, 250, 0.5);
+  border-radius: 2rem;
+  box-shadow: 
+    0 14px 30px rgba(35, 27, 78, 0.4),
+    inset 1.5px 1.5px 2px rgba(255, 255, 255, 0.4);
+}
+
+.clay-nav-icon {
+  background: #eae6ff;
+  color: #342a68;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(35, 27, 78, 0.2);
+  transition: all 0.2s ease;
+}
+
+.clay-nav-icon:hover {
+  background: #ffffff;
+  transform: scale(1.08);
+}
+
+/* Scroll Down Notch Pill ("GULIR ↓") */
+.clay-scroll-notch {
+  background: #6259ac;
+  border: 2px solid rgba(188, 181, 250, 0.4);
+  border-radius: 1.5rem;
+  box-shadow: 
+    inset 2px 2px 5px rgba(35, 27, 78, 0.25),
+    0 6px 16px rgba(35, 27, 78, 0.2);
+}
+
+/* Outline Tag Badge */
+.clay-badge {
+  background: rgba(234, 230, 255, 0.18);
+  border: 1px solid rgba(234, 230, 255, 0.35);
+  color: #eae6ff;
+  border-radius: 9999px;
+}
+
+.clay-badge-dark {
+  background: #473e88;
+  border: 1px solid rgba(188, 181, 250, 0.4);
+  color: #ffffff;
+  border-radius: 9999px;
+}
+
+

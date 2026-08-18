@@ -111,14 +111,17 @@ document.addEventListener("DOMContentLoaded", () => {
     manualContainer.classList.add("hidden");
     landingPage.classList.remove("hidden");
 
+    landingPage.style.opacity = "1";
+    landingPage.style.transform = "none";
+    if (btnAuto) btnAuto.style.opacity = "1";
+    if (btnManual) btnManual.style.opacity = "1";
+
     if (window.gsap) {
       window.gsap.fromTo(
         landingPage,
         { opacity: 0, scale: 0.95 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }
+        { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }
       );
-    } else {
-      landingPage.style.opacity = "1";
     }
   }
 });
