@@ -48,35 +48,43 @@
       background-position: center center;
       background-size: cover;
       background-repeat: no-repeat;
+      image-rendering: -webkit-optimize-contrast;
       will-change: transform, clip-path, opacity;
     }
 
-    /* Layer 1: 1.png (Initial Hero Landing Background - VISIBLE ON LOAD) */
+    /* Layer 1: 250-FRAME CITY CANVAS HERO SEQUENCE (Replaces 1.png) */
     #bg-layer-1 {
-      background-image: url('/assets/1.png');
-      transform: scale(1.22);
       z-index: 10;
       opacity: 1;
+      background: #060508;
+      overflow: hidden;
     }
 
-    /* Layer 4: 4.png (CENTERED STATUE BACKGROUND) */
-    #bg-layer-4 {
-      background-image: url('/assets/4.png?v=3');
-      background-size: cover;
-      background-position: center center;
-      background-color: #121116;
-      transform: scale(1.0);
-      z-index: 20;
-      opacity: 0;
+    .city-canvas-media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      filter: contrast(1.08) brightness(1.03) saturate(1.05);
     }
 
-    /* Layer 2: 2.png (TEMPLE IMAGE - Fades in, zooms in, 3D ring rotates, then peels away to reveal 4.png) */
-    #bg-layer-2 {
-      background-image: url('/assets/2.png');
-      transform: scale(1.0);
+    /* Layer Map: 250-FRAME MAP CANVAS SEQUENCE */
+    #bg-layer-map {
+      z-index: 15;
       opacity: 0;
-      z-index: 30;
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      background: #060508;
+      overflow: hidden;
+      will-change: opacity;
+    }
+
+    .map-canvas-media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      filter: contrast(1.08) brightness(1.03) saturate(1.05);
     }
 
     /* Ambient Overlay Gradients */
@@ -88,7 +96,7 @@
       z-index: 40;
     }
 
-    /* HERO TEXT (Layer 1 Content) */
+    /* HERO TEXT (Layer 1 Content - Fades in AFTER 250 city frames) */
     .hero-text-box {
       position: absolute;
       top: 5vh;
@@ -97,6 +105,8 @@
       text-align: left;
       max-width: 640px;
       margin-top: 1vh;
+      opacity: 0;
+      transform: translateY(40px);
       will-change: opacity, transform;
     }
 
@@ -138,74 +148,6 @@
       font-weight: 400;
       line-height: 1.6;
       text-shadow: 0 2px 10px rgba(0,0,0,0.9);
-    }
-
-    /* 3D CIRCULAR RING CAROUSEL (OVER 2.PNG) */
-    .carousel-3d-stage {
-      position: absolute;
-      inset: 0;
-      z-index: 45;
-      perspective: 1300px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      pointer-events: none;
-      will-change: opacity, transform;
-    }
-
-    .carousel-3d-ring {
-      position: relative;
-      width: 0;
-      height: 0;
-      transform-style: preserve-3d;
-      will-change: transform;
-    }
-
-    .ring-card {
-      position: absolute;
-      width: min(320px, 75vw);
-      height: min(480px, 65vh);
-      left: 50%;
-      top: 50%;
-      margin-left: max(-160px, -37.5vw);
-      margin-top: max(-240px, -32.5vh);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      background: rgba(10, 8, 14, 0.75);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 35px rgba(231, 76, 60, 0.35);
-      overflow: hidden;
-      backface-visibility: visible;
-      transform-style: preserve-3d;
-    }
-
-    /* 4 CARDS POSITIONED IN A 3D CIRCULAR RING */
-    #ring-card-1 { transform: rotateY(0deg) translateZ(460px); }
-    #ring-card-2 { transform: rotateY(90deg) translateZ(460px); }
-    #ring-card-3 { transform: rotateY(180deg) translateZ(460px); }
-    #ring-card-4 { transform: rotateY(270deg) translateZ(460px); }
-
-    .ring-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .ring-card-overlay {
-      position: absolute;
-      bottom: 0;
-      inset-x: 0;
-      padding: 1.2rem 1rem 0.8rem;
-      background: linear-gradient(0deg, rgba(6,5,8,0.95) 0%, rgba(6,5,8,0) 100%);
-      font-size: 0.85rem;
-      color: #f7d774;
-      text-align: center;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-weight: 500;
     }
 
     /* WORK EXPERIENCE STAGE (HIDDEN UNTIL 2.PNG & 3D RING FINISH) */
@@ -338,6 +280,562 @@
       margin: 0.2rem 0.2rem 0.2rem 0;
     }
 
+    /* ========================================================
+       ROMAN COLOSSEUM RECONSTRUCTION STAGE (NEW PINNED SECTION)
+       ======================================================== */
+    .colosseum-stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #060508;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .colosseum-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(20, 16, 26, 0.85) 0%, rgba(6, 5, 8, 0.98) 80%);
+      z-index: 5;
+    }
+
+    .sunlight-beam {
+      position: absolute;
+      top: -20%;
+      right: 10%;
+      width: 60vw;
+      height: 120vh;
+      background: radial-gradient(ellipse at top right, rgba(247, 215, 116, 0.25) 0%, rgba(217, 172, 71, 0.08) 45%, transparent 70%);
+      transform: rotate(-15deg);
+      pointer-events: none;
+      z-index: 6;
+      opacity: 0;
+      will-change: opacity;
+    }
+
+    #colosseum-dust-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 7;
+    }
+
+    /* 1. BLUEPRINT SVG CONTAINER */
+    .blueprint-container {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 15;
+      will-change: transform, opacity, filter;
+    }
+
+    .blueprint-badge {
+      font-size: clamp(0.7rem, 1vw, 0.85rem);
+      letter-spacing: 4px;
+      color: #d9ac47;
+      border: 1px solid rgba(217, 172, 71, 0.4);
+      padding: 0.4rem 1.2rem;
+      border-radius: 20px;
+      background: rgba(14, 11, 18, 0.8);
+      backdrop-filter: blur(10px);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      will-change: opacity;
+    }
+
+    .colosseum-svg {
+      width: min(900px, 85vw);
+      height: min(540px, 60vh);
+      overflow: visible;
+    }
+
+    .bp-elem {
+      transition: stroke-dashoffset 0.1s linear;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .bp-spoke-line, .bp-arch-elem, .bp-text {
+      opacity: 0;
+    }
+
+    /* 2. STRUCTURAL WIREFRAME & ARCHES LAYER */
+    .colosseum-structure-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 25;
+      opacity: 0;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    .structure-facade {
+      width: min(880px, 88vw);
+      height: min(480px, 58vh);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .colosseum-tier {
+      width: 100%;
+      border-radius: 16px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(247, 215, 116, 0.12) 0px,
+        rgba(247, 215, 116, 0.12) 28px,
+        transparent 28px,
+        transparent 56px
+      );
+      border: 1px solid rgba(247, 215, 116, 0.45);
+      box-shadow: 0 0 25px rgba(217, 172, 71, 0.25), inset 0 0 15px rgba(217, 172, 71, 0.15);
+      position: relative;
+      will-change: transform, opacity;
+    }
+
+    .tier-top { height: 28%; width: 92%; }
+    .tier-mid { height: 32%; width: 96%; }
+    .tier-base { height: 36%; width: 100%; }
+
+    /* 3. FINAL PHYSICAL RECONSTRUCTED MONUMENT CANVAS LAYER */
+    .colosseum-stone-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 35;
+      opacity: 0;
+      pointer-events: none;
+      background: #060508;
+      transform: scale(1.15);
+      will-change: transform, opacity;
+      overflow: hidden;
+    }
+
+    .colosseum-canvas-media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      filter: contrast(1.08) brightness(1.03) saturate(1.05);
+    }
+
+    .monument-title-box {
+      text-align: center;
+      z-index: 40;
+      opacity: 0;
+      transform: translateY(20px);
+      background: rgba(10, 8, 15, 0.85);
+      border: 1px solid rgba(247, 215, 116, 0.5);
+      border-radius: 20px;
+      padding: 1.8rem 3rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 35px rgba(217, 172, 71, 0.3);
+      max-width: min(820px, 90vw);
+      will-change: opacity, transform;
+    }
+
+    .monument-sub {
+      font-size: clamp(0.75rem, 1vw, 0.9rem);
+      letter-spacing: 4px;
+      color: #f7d774;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+      font-weight: 500;
+    }
+
+    .monument-heading {
+      font-size: clamp(1.8rem, 3.8vw, 3.2rem);
+      color: #ffffff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 5px 20px rgba(0,0,0,0.9);
+      line-height: 1.1;
+    }
+
+    /* ROMAN ARCHITECTURAL MATHEMATICS TYPEWRITER HUD */
+    .colosseum-math-hud {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 30;
+      opacity: 0;
+      will-change: opacity, transform;
+    }
+
+    .math-panel {
+      position: absolute;
+      width: min(320px, 38vw);
+      background: rgba(10, 8, 15, 0.85);
+      border: 1px solid rgba(247, 215, 116, 0.4);
+      border-radius: 14px;
+      padding: 1.2rem;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85), 0 0 25px rgba(217, 172, 71, 0.15);
+      will-change: transform, opacity;
+    }
+
+    .math-panel-left {
+      left: 3vw;
+      top: 15vh;
+    }
+
+    .math-panel-right {
+      right: 3vw;
+      top: 15vh;
+    }
+
+    @media (max-width: 900px) {
+      .math-panel {
+        width: 44vw;
+        font-size: 0.68rem;
+        padding: 0.8rem;
+      }
+      .math-panel-left { left: 2vw; top: 10vh; }
+      .math-panel-right { right: 2vw; top: 10vh; }
+    }
+
+    @media (max-width: 640px) {
+      .math-panel {
+        display: none;
+      }
+    }
+
+    .math-panel-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(217, 172, 71, 0.25);
+      padding-bottom: 0.4rem;
+    }
+
+    .math-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e74c3c;
+      box-shadow: 0 0 8px #e74c3c;
+    }
+
+    .math-title {
+      font-size: 0.72rem;
+      color: #d9ac47;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .math-code-content {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.78rem;
+      color: #f7d774;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      text-shadow: 0 0 6px rgba(247, 215, 116, 0.4);
+    }
+
+    /* ========================================================
+       ROMAN MANUSCRIPT CHRONICLE OVERLAY (NO CARDS / CINEMATIC TYPOGRAPHY)
+       ======================================================== */
+    .manuscript-stage {
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .manuscript-chapter {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0;
+      visibility: hidden;
+      will-change: opacity, transform, filter, letter-spacing;
+      padding: 1.5rem 0;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      max-width: 680px;
+    }
+
+    .chapter-center {
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      max-width: 820px;
+    }
+
+    .chapter-left {
+      left: 7vw;
+      text-align: left;
+    }
+
+    .chapter-right {
+      right: 7vw;
+      text-align: left;
+    }
+
+    .manuscript-label {
+      font-family: "Bodoni Moda", serif;
+      font-size: clamp(0.8rem, 1.2vw, 1.05rem);
+      font-weight: 600;
+      letter-spacing: 7px;
+      text-transform: uppercase;
+      color: #f7d774;
+      margin-bottom: 0.6rem;
+      text-shadow: 0 0 15px rgba(247, 215, 116, 0.5);
+    }
+
+    .manuscript-title {
+      font-family: "Bodoni Moda", serif;
+      font-size: clamp(2rem, 3.8vw, 3.4rem);
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      line-height: 1.05;
+      text-transform: uppercase;
+      color: #ffffff;
+      margin-bottom: 0.6rem;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95);
+    }
+
+    .manuscript-award {
+      font-family: "Bodoni Moda", serif;
+      font-size: 0.78rem;
+      letter-spacing: 3px;
+      color: #d9ac47;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      font-weight: 500;
+    }
+
+    .manuscript-typing-text {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(0.95rem, 1.25vw, 1.2rem);
+      color: #e6dac8;
+      line-height: 1.7;
+      font-weight: 300;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
+      margin-bottom: 1.4rem;
+      min-height: 4.5rem;
+    }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.1em;
+      background-color: #f7d774;
+      vertical-align: middle;
+      margin-left: 2px;
+      box-shadow: 0 0 8px #f7d774;
+      animation: cursorBlink 0.8s infinite;
+    }
+
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .manuscript-tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .manuscript-tech-tag {
+      font-family: "Bodoni Moda", serif;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #ffb499;
+      background: rgba(184, 57, 15, 0.2);
+      border: 1px solid rgba(247, 215, 116, 0.35);
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      text-shadow: 0 0 6px rgba(0,0,0,0.8);
+    }
+
+    @media (max-width: 768px) {
+      .manuscript-chapter {
+        left: 5% !important;
+        right: 5% !important;
+        width: 90% !important;
+        max-width: 100% !important;
+        text-align: center !important;
+        padding: 1.5rem;
+      }
+      .manuscript-tech-stack {
+        justify-content: center;
+      }
+    }
+
+    /* 3-CARD SHOWCASE ROW FOR 6.PNG, 7.PNG, 8.PNG */
+    #architectural-showcase-section {
+      position: relative;
+      z-index: 100;
+      background: #060508;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem 2rem;
+      box-sizing: border-box;
+    }
+
+    .showcase-grid-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.8rem;
+      width: 100%;
+    }
+
+    @media (max-width: 900px) {
+      .showcase-grid-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .showcase-card {
+      position: relative;
+      height: clamp(540px, 68vh, 620px);
+      min-height: 520px;
+      border-radius: 20px;
+      border: 1px solid rgba(217, 172, 71, 0.45);
+      background: radial-gradient(circle at center, rgba(28, 22, 35, 0.95) 0%, rgba(10, 8, 15, 0.98) 100%);
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 25px rgba(217, 172, 71, 0.15);
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      cursor: pointer;
+      will-change: transform, opacity, filter;
+      opacity: 1;
+    }
+
+    .showcase-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: #f7d774;
+      box-shadow: 0 30px 65px rgba(217, 172, 71, 0.4);
+    }
+
+    .showcase-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center top;
+      display: block;
+      padding: 1rem 0.5rem 3.5rem;
+      image-rendering: -webkit-optimize-contrast;
+      filter: contrast(1.12) brightness(1.04);
+      transition: transform 0.4s ease;
+    }
+
+    .showcase-card:hover img {
+      transform: scale(1.06);
+    }
+
+    .showcase-card-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.2rem 1rem 0.8rem;
+      background: linear-gradient(0deg, rgba(6,5,8,0.96) 0%, rgba(6,5,8,0) 100%);
+      color: #f7d774;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+      text-align: center;
+      z-index: 5;
+    }
+
+    .colosseum-card-date {
+      font-size: 0.75rem;
+      color: #d9ac47;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+      display: block;
+      font-weight: 500;
+    }
+
+    .colosseum-card-title {
+      font-size: 1.3rem;
+      color: #ffffff;
+      margin-bottom: 0.3rem;
+    }
+
+    .colosseum-card-sub {
+      font-size: 0.88rem;
+      color: #b8a790;
+      margin-bottom: 0.8rem;
+      font-style: italic;
+    }
+
+    .colosseum-card-desc {
+      font-size: 0.9rem;
+      color: #d4c4ac;
+      line-height: 1.65;
+      margin-bottom: 1.2rem;
+    }
+
+    .colosseum-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(217, 172, 71, 0.2);
+      padding-top: 1rem;
+    }
+
+    .colosseum-tech-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+    }
+
+    .c-pill {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.55rem;
+      background: rgba(184, 57, 15, 0.25);
+      border: 1px solid rgba(217, 172, 71, 0.5);
+      border-radius: 4px;
+      color: #ff9d7b;
+    }
+
+    .colosseum-btn {
+      font-size: 0.78rem;
+      color: #f7d774;
+      text-decoration: none;
+      letter-spacing: 1px;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .colosseum-btn:hover {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(247, 215, 116, 0.8);
+    }
+
     /* SECTIONS BELOW CINEMATIC STAGE */
     .section-container {
       max-width: 1150px;
@@ -352,66 +850,6 @@
       margin-bottom: 2.5rem;
       border-bottom: 1px solid rgba(217, 172, 71, 0.3);
       padding-bottom: 0.8rem;
-    }
-
-    /* Cards Grid */
-    .grid-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 2rem;
-    }
-
-    .resume-card {
-      background: linear-gradient(145deg, rgba(20, 16, 24, 0.92), rgba(10, 8, 14, 0.96));
-      border: 1px solid rgba(217, 172, 71, 0.3);
-      border-radius: 14px;
-      padding: 2.2rem;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.7);
-      backdrop-filter: blur(8px);
-      transition: transform 0.4s ease, border-color 0.4s ease;
-    }
-
-    .resume-card:hover {
-      transform: translateY(-6px);
-      border-color: #f7d774;
-    }
-
-    .card-date {
-      font-size: 0.8rem;
-      color: #d9ac47;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .card-title {
-      font-size: 1.4rem;
-      color: #ffffff;
-      margin-bottom: 0.4rem;
-    }
-
-    .card-sub {
-      font-size: 0.95rem;
-      color: #b8a790;
-      margin-bottom: 1rem;
-      font-style: italic;
-    }
-
-    .card-text {
-      font-size: 0.95rem;
-      color: #d4c4ac;
-      line-height: 1.7;
-    }
-
-    .tech-pill {
-      display: inline-block;
-      padding: 0.2rem 0.6rem;
-      background: rgba(184, 57, 15, 0.25);
-      border: 1px solid rgba(184, 57, 15, 0.5);
-      border-radius: 4px;
-      font-size: 0.75rem;
-      color: #ff9d7b;
-      margin: 0.2rem 0.2rem 0.2rem 0;
     }
 
     /* Skills Grid */
@@ -456,7 +894,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: contrast(1.1) brightness(0.9);
+      image-rendering: -webkit-optimize-contrast;
+      filter: contrast(1.1) brightness(0.95);
     }
 
     /* Clean Footer */
@@ -473,185 +912,273 @@
       color: #f7d774;
       text-decoration: none;
     }
+
+    /* FLOATING AUDIO CONTROLLER WIDGET */
+    .audio-control-btn {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      background: rgba(14, 11, 18, 0.75);
+      border: 1px solid rgba(217, 172, 71, 0.4);
+      border-radius: 30px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #f7d774;
+      font-family: "Bodoni Moda", serif;
+      font-size: 0.82rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(217, 172, 71, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .audio-control-btn:hover {
+      transform: scale(1.05);
+      background: rgba(24, 18, 30, 0.9);
+      border-color: #f7d774;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.9), 0 0 25px rgba(217, 172, 71, 0.4);
+    }
+
+    .audio-eq-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 14px;
+    }
+
+    .audio-eq-bar {
+      width: 3px;
+      height: 100%;
+      background-color: #f7d774;
+      border-radius: 2px;
+      animation: eqPulse 1.2s infinite ease-in-out alternate;
+    }
+
+    .audio-eq-bar:nth-child(1) { animation-delay: 0.1s; }
+    .audio-eq-bar:nth-child(2) { animation-delay: 0.3s; }
+    .audio-eq-bar:nth-child(3) { animation-delay: 0.5s; }
+
+    .audio-control-btn.paused .audio-eq-bar {
+      animation: none;
+      height: 4px;
+      opacity: 0.5;
+    }
+
+    @keyframes eqPulse {
+      0% { height: 3px; }
+      100% { height: 14px; }
+    }
   </style>
 </head>
 <body>
 
+  <!-- FLOATING ASH / EMBER PARTICLES OVERLAY CANVAS -->
+  <canvas id="ash-canvas" style="position: fixed; inset: 0; pointer-events: none; z-index: 9990;"></canvas>
+
+  <!-- BACKGROUND AUDIO PLAYER & FLOATING CONTROLLER -->
+  <audio id="bg-audio" loop src="assets/background_audio.mpeg" preload="auto"></audio>
+  <button id="audio-toggle-btn" class="audio-control-btn paused" title="Toggle Background Music">
+    <div class="audio-eq-bars">
+      <div class="audio-eq-bar"></div>
+      <div class="audio-eq-bar"></div>
+      <div class="audio-eq-bar"></div>
+    </div>
+    <span id="audio-btn-label">SOUND: OFF</span>
+  </button>
+
   <!-- MAIN CINEMATIC SCROLLEYTELLING STAGE -->
   <div class="cinematic-stage" id="cinematic-stage">
     
-    <!-- BACKGROUND LAYERS: Order z-index 1.png (10) -> 4.png (20, centered) -> 2.png (30) -->
-    <div class="bg-layer" id="bg-layer-1"></div>
-    <div class="bg-layer" id="bg-layer-4"></div>
-    <div class="bg-layer" id="bg-layer-2"></div>
+    <!-- BACKGROUND LAYERS: 250-Frame City Canvas (10) & 250-Frame Map Canvas (15) -->
+    <div class="bg-layer" id="bg-layer-1">
+      <canvas id="city-canvas" class="city-canvas-media"></canvas>
+    </div>
+    <div class="bg-layer" id="bg-layer-map">
+      <canvas id="map-canvas" class="map-canvas-media"></canvas>
+    </div>
 
     <div class="stage-overlay"></div>
 
-    <!-- 1. HERO TEXT (Layer 1 Content) -->
-    <div class="hero-text-box" id="hero-box">
-      <div class="hero-subtitle" id="hero-sub">AI & DATA SCIENCE ENGINEER</div>
+    <!-- MANUSCRIPT STAGE OVERLAY FOR CITY & MAP SEQUENCE (CARD-LESS TYPOGRAPHY) -->
+    <div class="manuscript-stage" id="city-manuscript-stage">
       
-      <h1 class="title" id="hero-title">
-        PRATHAMESH
-        <span class="outline-title">SALOKHE</span>
-      </h1>
-
-      <p class="hero-summary" id="hero-summary">
-        AI & Data Science undergraduate specializing in Generative AI systems, RAG pipelines, and cloud-deployed machine learning applications.
-      </p>
-    </div>
-
-    <!-- 2. 3D CIRCULAR RING CAROUSEL (OVER 2.PNG) -->
-    <div class="carousel-3d-stage" id="carousel-stage">
-      <div class="carousel-3d-ring" id="carousel-ring">
-        
-        <div class="ring-card" id="ring-card-1">
-          <img src="/assets/rot_1.png?v=3" alt="Zeus Bust" />
-          <div class="ring-card-overlay">I. ZEUS • VISION & POWER</div>
-        </div>
-        
-        <div class="ring-card" id="ring-card-2">
-          <img src="/assets/rot_2.png?v=3" alt="Gold Warrior Statue" />
-          <div class="ring-card-overlay">II. ARCHITECTURE & REASONING</div>
-        </div>
-
-        <div class="ring-card" id="ring-card-3">
-          <img src="/assets/rot_3.png?v=3" alt="Fortuna Figure" />
-          <div class="ring-card-overlay">III. FORTIS FORTUNA ADIUVAT</div>
-        </div>
-
-        <div class="ring-card" id="ring-card-4">
-          <img src="/assets/rot_4.png?v=3" alt="Lady Justice" />
-          <div class="ring-card-overlay">IV. RIGOR & BALANCE</div>
-        </div>
-
+      <!-- PROLOGUE (Center) -->
+      <div class="manuscript-chapter chapter-center" id="city-chapter-prologue">
+        <div class="manuscript-label">PROLOGUE</div>
+        <h2 class="manuscript-title">THE CHRONICLE BEGINS</h2>
+        <p class="manuscript-typing-text" data-text="Every great creation begins long before the final monument is revealed. In the quiet intersection of code, logic, and human imagination, the foundation is laid."><span class="typing-content"></span><span class="typing-cursor">|</span></p>
       </div>
-    </div>
 
-    <!-- 3. TRANSPARENT WORK EXPERIENCE STAGE (Centered 4.png Backdrop + 3 Cards in 1 Row) -->
-    <div class="exp-content-stage" id="exp-stage">
-      
-      <div class="exp-top-bar" id="exp-top-bar">
-        <div class="exp-top-bar-title">🏛️ WORK EXPERIENCE ARCHITECTURE</div>
-        <div class="exp-top-bar-tabs">
-          <span>AI Stack</span>
-          <span>Leadership</span>
+      <!-- PREFACE (Left) -->
+      <div class="manuscript-chapter chapter-left" id="city-chapter-preface">
+        <div class="manuscript-label">PREFACE</div>
+        <h2 class="manuscript-title">THE ARCHITECT’S PHILOSOPHY</h2>
+        <p class="manuscript-typing-text" data-text="Before there were neural architectures, vector search, and autonomous agents, there was a simple question: What can I build that endures?"><span class="typing-content"></span><span class="typing-cursor">|</span></p>
+      </div>
+
+      <!-- INTRO / HERO (Right) -->
+      <div class="manuscript-chapter chapter-right" id="city-chapter-intro">
+        <div class="manuscript-label">INTRODUCTION</div>
+        <h2 class="manuscript-title">PRATHAMESH SALOKHE</h2>
+        <div class="manuscript-award">AI & DATA SCIENCE ENGINEER</div>
+        <p class="manuscript-typing-text" data-text="Undergraduate engineer specializing in Generative AI architectures, high-scale RAG pipelines, zero-hallucination vector search, and production cloud backends."><span class="typing-content"></span><span class="typing-cursor">|</span></p>
+        <div class="manuscript-tech-stack">
+          <span class="manuscript-tech-tag">Python</span>
+          <span class="manuscript-tech-tag">LangChain</span>
+          <span class="manuscript-tech-tag">Milvus Vector DB</span>
+          <span class="manuscript-tech-tag">AWS Cloud</span>
         </div>
       </div>
 
-      <!-- 3 Glass Experience Cards in 1 Single Horizontal Row -->
-      <div class="exp-poster-grid">
-        
-        <div class="exp-transparent-card" id="exp-card-1">
-          <div>
-            <div class="exp-card-badge">DEC 2025 – JAN 2026</div>
-            <h3 class="exp-card-title">Generative AI & Data Intern</h3>
-            <div class="exp-card-sub">Sunbeam Infotech Pvt. Ltd., Pune</div>
-            <p class="exp-card-desc">
-              Designed and deployed the Sunbeam RAG Chatbot (IIT GenAI Program) using LangChain, ChromaDB, Groq LLaMA, FastAPI, and Streamlit with automated CI/CD pipelines (95 commits). Automated Docker ETL pipelines and built Power BI dashboards.
-            </p>
-          </div>
-          <div style="margin-top:1rem;">
-            <span class="tech-pill-red">LangChain</span>
-            <span class="tech-pill-red">Groq LLM</span>
-            <span class="tech-pill-red">FastAPI</span>
-          </div>
+      <!-- EXPERIENCE I (Left) -->
+      <div class="manuscript-chapter chapter-left" id="map-chapter-exp1">
+        <div class="manuscript-label">CHRONICLE OF EXPERIENCE I</div>
+        <h2 class="manuscript-title">SUNBEAM INFOTECH INTERN</h2>
+        <div class="manuscript-award">DEC 2025 – JAN 2026 • PUNE</div>
+        <p class="manuscript-typing-text" data-text="Engineered the Sunbeam RAG Chatbot utilizing LangChain, ChromaDB, Groq LLaMA, FastAPI, and Streamlit with automated CI/CD pipelines and Docker ETL workflows."><span class="typing-content"></span><span class="typing-cursor">|</span></p>
+        <div class="manuscript-tech-stack">
+          <span class="manuscript-tech-tag">LangChain</span>
+          <span class="manuscript-tech-tag">Groq LLM</span>
+          <span class="manuscript-tech-tag">FastAPI</span>
+          <span class="manuscript-tech-tag">Docker</span>
         </div>
-
-        <div class="exp-transparent-card" id="exp-card-2">
-          <div>
-            <div class="exp-card-badge">2024 – 2025</div>
-            <h3 class="exp-card-title">Technical Lead</h3>
-            <div class="exp-card-sub">Data Science Student Association, DKTE</div>
-            <p class="exp-card-desc">
-              Led technical workshops and project mentoring on Machine Learning, Cloud tools, and Generative AI architectures. Coordinated department hackathon participation and technical student initiatives.
-            </p>
-          </div>
-          <div style="margin-top:1rem;">
-            <span class="tech-pill-red">Mentorship</span>
-            <span class="tech-pill-red">ML Workshops</span>
-            <span class="tech-pill-red">GenAI</span>
-          </div>
-        </div>
-
-        <div class="exp-transparent-card" id="exp-card-3">
-          <div>
-            <div class="exp-card-badge">ENGINEERING MILESTONES</div>
-            <h3 class="exp-card-title">Core Systems & Data Stack</h3>
-            <div class="exp-card-sub">AWS • Vector Databases • Production RAG</div>
-            <p class="exp-card-desc">
-              Specialized in zero-hallucination vector search (Zilliz Milvus & ChromaDB), AWS Cloud Data Engineering, and building high-scale real-time AI backends.
-            </p>
-          </div>
-          <div style="margin-top:1rem;">
-            <span class="tech-pill-red">AWS Data Eng</span>
-            <span class="tech-pill-red">Milvus DB</span>
-            <span class="tech-pill-red">Docker</span>
-          </div>
-        </div>
-
       </div>
+
+      <!-- EXPERIENCE II (Right) -->
+      <div class="manuscript-chapter chapter-right" id="map-chapter-exp2">
+        <div class="manuscript-label">CHRONICLE OF EXPERIENCE II</div>
+        <h2 class="manuscript-title">TECHNICAL LEAD • DKTE</h2>
+        <div class="manuscript-award">2024 – 2025 • DATA SCIENCE ASSOCIATION</div>
+        <p class="manuscript-typing-text" data-text="Led technical workshops and project mentoring on Machine Learning, Cloud tools, and Generative AI architectures while coordinating hackathons and student initiatives."><span class="typing-content"></span><span class="typing-cursor">|</span></p>
+        <div class="manuscript-tech-stack">
+          <span class="manuscript-tech-tag">Mentorship</span>
+          <span class="manuscript-tech-tag">GenAI Workshops</span>
+          <span class="manuscript-tech-tag">Hackathon Lead</span>
+        </div>
+      </div>
+
     </div>
 
   </div>
 
 
-  <!-- 4. FEATURED PROJECTS SECTION -->
-  <section class="section-container" id="projects-section">
-    <h2 class="section-header">Featured Projects</h2>
+  <!-- ========================================================
+     ROMAN COLOSSEUM RECONSTRUCTION STAGE (250-FRAME SEQUENCE)
+     ======================================================== -->
+  <div class="colosseum-stage" id="colosseum-stage">
+    
+    <!-- Atmospheric Canvas Particles & Haze -->
+    <div class="colosseum-bg-overlay"></div>
+    <div class="sunlight-beam"></div>
+    <canvas id="colosseum-dust-canvas"></canvas>
 
-    <div class="grid-cards">
+    <!-- 250-FRAME CANVAS SCROLL SEQUENCE LAYER -->
+    <div class="colosseum-stone-layer" id="colosseum-stone-layer">
+      <canvas id="colosseum-canvas" class="colosseum-canvas-media"></canvas>
+      <div class="monument-title-box" id="monument-title-box">
+        <div class="monument-sub">ANCIENT ROME ARCHITECTURE</div>
+        <h2 class="monument-heading">COLOSSEUM OF INNOVATION</h2>
+      </div>
+    </div>
+
+    <!-- ROMAN MANUSCRIPT CHRONICLE OVERLAY (CINEMATIC TYPOGRAPHY - NO CARDS) -->
+    <div class="manuscript-stage" id="manuscript-stage">
       
-      <!-- Project 1 -->
-      <div class="resume-card">
-        <div class="card-date">FEB 2026 // ACM TOP 6 FINALIST</div>
-        <h3 class="card-title">NeuroNauts AI Study Companion</h3>
-        <div class="card-sub">Python, Groq, Zilliz Cloud, HuggingFace, Streamlit</div>
-        <p class="card-text">
-          AI study companion providing grounded natural-language Q&A over OpenStax Psychology textbook. Pipeline: Docling PDF parsing → 2,966 chunks → Sentence-Transformers → Zilliz Cloud (Milvus) → Groq LLaMA 3.3 70B inference.
-        </p>
-        <div style="margin-top:1rem;">
-          <span class="tech-pill">LangChain</span>
-          <span class="tech-pill">Milvus</span>
-          <span class="tech-pill">LLaMA 3.3</span>
+      <!-- PROLOGUE (Center Aligned) -->
+      <div class="manuscript-chapter chapter-center" id="chapter-prologue">
+        <div class="manuscript-label">PROLOGUE</div>
+        <h2 class="manuscript-title">THE INCEPTION OF MONUMENTS</h2>
+        <p class="manuscript-typing-text" data-text="Every great creation begins long before the final monument is revealed. In the quiet intersection of code, logic, and human imagination, the foundation is laid."><span class="typing-content"></span><span class="typing-cursor">|</span></p>
+      </div>
+
+      <!-- PREFACE (Left Aligned) -->
+      <div class="manuscript-chapter chapter-left" id="chapter-preface">
+        <div class="manuscript-label">PREFACE</div>
+        <h2 class="manuscript-title">THE ARCHITECT’S QUESTION</h2>
+        <p class="manuscript-typing-text" data-text="Before there were systems, models, interfaces, and algorithms, there was a simple enduring question: What can I build that endures?"><span class="typing-content"></span><span class="typing-cursor">|</span></p>
+      </div>
+
+      <!-- CHAPTER I (Right Aligned) — NeuroNauts AI Study Companion -->
+      <div class="manuscript-chapter chapter-right" id="chapter-1">
+        <div class="manuscript-label">CHAPTER I</div>
+        <h2 class="manuscript-title">NEURONAUTS AI COMPANION</h2>
+        <div class="manuscript-award">FEB 2026 • ACM TOP 6 FINALIST</div>
+        <p class="manuscript-typing-text" data-text="An intelligent study engine engineered to turn complex textbook knowledge into instant, grounded reasoning over 2,966 vector chunks with Zilliz Cloud Milvus and Groq LLaMA 3.3."><span class="typing-content"></span><span class="typing-cursor">|</span></p>
+        <div class="manuscript-tech-stack">
+          <span class="manuscript-tech-tag">Python</span>
+          <span class="manuscript-tech-tag">Milvus Vector DB</span>
+          <span class="manuscript-tech-tag">Groq LLaMA 3.3 70B</span>
+          <span class="manuscript-tech-tag">LangChain</span>
         </div>
       </div>
 
-      <!-- Project 2 -->
-      <div class="resume-card">
-        <div class="card-date">2025 // DYPSEM HACKOUTSAV</div>
-        <h3 class="card-title">ALZ-AI Alzheimer’s Care Ecosystem</h3>
-        <div class="card-sub">React, FastAPI, AWS Rekognition, PostgreSQL</div>
-        <p class="card-text">
-          AI passive care platform featuring real-time fall detection, geofencing WhatsApp alerts, face recognition, and medication reminders with unified caregiver + doctor dashboards.
-        </p>
-        <div style="margin-top:1rem;">
-          <span class="tech-pill">React</span>
-          <span class="tech-pill">AWS Rekognition</span>
-          <span class="tech-pill">FastAPI</span>
+      <!-- CHAPTER II (Left Aligned) — ALZ-AI Care Ecosystem -->
+      <div class="manuscript-chapter chapter-left" id="chapter-2">
+        <div class="manuscript-label">CHAPTER II</div>
+        <h2 class="manuscript-title">ALZ-AI CARE ECOSYSTEM</h2>
+        <div class="manuscript-award">2025 • DYPSEM HACKOUTSAV</div>
+        <p class="manuscript-typing-text" data-text="A passive AI guardian built for patient care, combining real-time computer vision fall detection, AWS Rekognition facial awareness, and instant WhatsApp telemetry."><span class="typing-content"></span><span class="typing-cursor">|</span></p>
+        <div class="manuscript-tech-stack">
+          <span class="manuscript-tech-tag">React</span>
+          <span class="manuscript-tech-tag">FastAPI</span>
+          <span class="manuscript-tech-tag">AWS Rekognition</span>
+          <span class="manuscript-tech-tag">PostgreSQL</span>
         </div>
       </div>
 
-      <!-- Project 3 -->
-      <div class="resume-card">
-        <div class="card-date">DEC 2025 // IIT GENAI PROGRAM</div>
-        <h3 class="card-title">Sunbeam RAG Institutional Assistant</h3>
-        <div class="card-sub">LangChain, ChromaDB, Groq LLM, Streamlit</div>
-        <p class="card-text">
-          End-to-end zero-hallucination institutional assistant. Selenium scraper → LangChain chunking → Sentence Transformers → ChromaDB → Groq LLM with GitHub Actions CI/CD.
-        </p>
-        <div style="margin-top:1rem;">
-          <span class="tech-pill">ChromaDB</span>
-          <span class="tech-pill">Selenium</span>
-          <span class="tech-pill">CI/CD</span>
+      <!-- CHAPTER III (Right Aligned) — Sunbeam RAG Engine -->
+      <div class="manuscript-chapter chapter-right" id="chapter-3">
+        <div class="manuscript-label">CHAPTER III</div>
+        <h2 class="manuscript-title">SUNBEAM RAG ENGINE</h2>
+        <div class="manuscript-award">DEC 2025 • IIT GENAI PROGRAM</div>
+        <p class="manuscript-typing-text" data-text="An institutional intelligence platform engineered for zero-hallucination document retrieval utilizing automated web ingestion, Sentence Transformers, ChromaDB, and GitHub Actions CI/CD."><span class="typing-content"></span><span class="typing-cursor">|</span></p>
+        <div class="manuscript-tech-stack">
+          <span class="manuscript-tech-tag">LangChain</span>
+          <span class="manuscript-tech-tag">ChromaDB</span>
+          <span class="manuscript-tech-tag">Selenium</span>
+          <span class="manuscript-tech-tag">Groq LLM</span>
         </div>
+      </div>
+
+      <!-- EPILOGUE (Center Aligned) -->
+      <div class="manuscript-chapter chapter-center" id="chapter-epilogue">
+        <div class="manuscript-label">EPILOGUE</div>
+        <h2 class="manuscript-title">THE ENDURING CHRONICLE</h2>
+        <p class="manuscript-typing-text" data-text="Rome was not built in a day. Neither are the things worth building. Every line of code is a stone placed toward the future."><span class="typing-content"></span><span class="typing-cursor">|</span></p>
       </div>
 
     </div>
 
-    <!-- Gold Coins Visual Banner (3.png) -->
-    <div class="coins-banner" id="coins-banner-box">
-      <img src="/assets/3.png" alt="Gold Coins Visual" />
+  </div>
+
+
+  <!-- ========================================================
+     ARCHITECTURAL SYSTEM SHOWCASE (6.PNG, 7.PNG, 8.PNG IN 1 ROW)
+     ======================================================== -->
+  <section class="section-container" id="architectural-showcase-section">
+    <h2 class="section-header">Imperial Systems & Architecture</h2>
+    
+    <div class="showcase-grid-row">
+      <div class="showcase-card" id="showcase-card-1">
+        <img src="assets/6.png" alt="Architectural Diagram 6" />
+        <div class="showcase-card-overlay">I. NEURONAUTS SYSTEM PARADIGM</div>
+      </div>
+      
+      <div class="showcase-card" id="showcase-card-2">
+        <img src="assets/7.png" alt="Architectural Diagram 7" />
+        <div class="showcase-card-overlay">II. ALZ-AI CARE ECOSYSTEM ENGINE</div>
+      </div>
+      
+      <div class="showcase-card" id="showcase-card-3">
+        <img src="assets/8.png" alt="Architectural Diagram 8" />
+        <div class="showcase-card-overlay">III. SUNBEAM RAG PIPELINE</div>
+      </div>
     </div>
   </section>
 
@@ -707,6 +1234,11 @@
         </p>
       </div>
     </div>
+
+    <!-- Gold Coins Visual Banner (3.png) -->
+    <div class="coins-banner" id="coins-banner-box">
+      <img src="/assets/3.png?v=4" alt="Gold Coins Visual" />
+    </div>
   </section>
 
 
@@ -722,104 +1254,456 @@
     document.addEventListener("DOMContentLoaded", () => {
       gsap.registerPlugin(ScrollTrigger);
 
-      // 1. Initial Hero Entry Intro
-      const introTl = gsap.timeline({ defaults: { ease: "power3.out", duration: 1.2 } });
-      introTl.from("#hero-sub", { x: -30, opacity: 0 })
-             .from("#hero-title", { x: -30, opacity: 0 }, "-=0.9")
-             .from("#hero-summary", { y: 25, opacity: 0 }, "-=0.7");
+      // BACKGROUND AUDIO AUTOMATIC LOOP ENGINE & USER GESTURE UNLOCK
+      const bgAudio = document.getElementById("bg-audio");
+      const audioBtn = document.getElementById("audio-toggle-btn");
+      const audioLabel = document.getElementById("audio-btn-label");
 
-      // 2. MASTER PINNED SCROLLEYTELLING TIMELINE
+      if (bgAudio && audioBtn) {
+        bgAudio.volume = 0.5;
+
+        function playAudio() {
+          bgAudio.play().then(() => {
+            audioBtn.classList.remove("paused");
+            if (audioLabel) audioLabel.textContent = "SOUND: ON";
+          }).catch(err => {
+            console.log("Autoplay waiting for user gesture:", err);
+          });
+        }
+
+        function pauseAudio() {
+          bgAudio.pause();
+          audioBtn.classList.add("paused");
+          if (audioLabel) audioLabel.textContent = "SOUND: OFF";
+        }
+
+        audioBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (bgAudio.paused) {
+            playAudio();
+          } else {
+            pauseAudio();
+          }
+        });
+
+        // Trigger audio playback automatically on first user scroll, click, or keydown
+        const unlockAudio = () => {
+          playAudio();
+          window.removeEventListener("click", unlockAudio);
+          window.removeEventListener("scroll", unlockAudio);
+          window.removeEventListener("keydown", unlockAudio);
+        };
+
+        window.addEventListener("click", unlockAudio, { once: true });
+        window.addEventListener("scroll", unlockAudio, { once: true });
+        window.addEventListener("keydown", unlockAudio, { once: true });
+      }
+
+      // 250-FRAME CITY CANVAS SCROLL PRELOADER & RENDER ENGINE (HERO SECTION)
+      const cityFrameCount = 250;
+      const currentCityFrame = index => `assets/city_frames/frame_${(index + 1).toString().padStart(3, '0')}.jpg`;
+
+      const cityImages = [];
+      const cityFrameState = { frame: 0 };
+
+      for (let i = 0; i < cityFrameCount; i++) {
+        const img = new Image();
+        img.src = currentCityFrame(i);
+        cityImages.push(img);
+      }
+
+      const cityCanvas = document.getElementById("city-canvas");
+      const cityContext = cityCanvas ? cityCanvas.getContext("2d") : null;
+
+      function updateCityCanvasSize() {
+        if (!cityCanvas) return;
+        cityCanvas.width = window.innerWidth;
+        cityCanvas.height = window.innerHeight;
+        renderCityFrame();
+      }
+      window.addEventListener("resize", updateCityCanvasSize);
+
+      function renderCityFrame() {
+        if (!cityCanvas || !cityContext || !cityImages[cityFrameState.frame]) return;
+        const img = cityImages[cityFrameState.frame];
+        if (!img.complete) return;
+
+        const hRatio = cityCanvas.width / img.width;
+        const vRatio = cityCanvas.height / img.height;
+        const ratio = Math.max(hRatio, vRatio);
+
+        const centerShift_x = (cityCanvas.width - img.width * ratio) / 2;
+        const centerShift_y = (cityCanvas.height - img.height * ratio) / 2;
+
+        cityContext.clearRect(0, 0, cityCanvas.width, cityCanvas.height);
+        cityContext.drawImage(
+          img, 0, 0, img.width, img.height,
+          centerShift_x, centerShift_y, img.width * ratio, img.height * ratio
+        );
+      }
+
+      if (cityImages[0]) cityImages[0].onload = renderCityFrame;
+      updateCityCanvasSize();
+
+      // 250-FRAME MAP CANVAS SCROLL PRELOADER & RENDER ENGINE
+      const mapFrameCount = 250;
+      const currentMapFrame = index => `assets/map_frames/frame_${(index + 1).toString().padStart(3, '0')}.jpg`;
+
+      const mapImages = [];
+      const mapFrameState = { frame: 0 };
+
+      for (let i = 0; i < mapFrameCount; i++) {
+        const img = new Image();
+        img.src = currentMapFrame(i);
+        mapImages.push(img);
+      }
+
+      const mapCanvas = document.getElementById("map-canvas");
+      const mapContext = mapCanvas ? mapCanvas.getContext("2d") : null;
+
+      function updateMapCanvasSize() {
+        if (!mapCanvas) return;
+        mapCanvas.width = window.innerWidth;
+        mapCanvas.height = window.innerHeight;
+        renderMapFrame();
+      }
+      window.addEventListener("resize", updateMapCanvasSize);
+
+      function renderMapFrame() {
+        if (!mapCanvas || !mapContext || !mapImages[mapFrameState.frame]) return;
+        const img = mapImages[mapFrameState.frame];
+        if (!img.complete) return;
+
+        const hRatio = mapCanvas.width / img.width;
+        const vRatio = mapCanvas.height / img.height;
+        const ratio = Math.max(hRatio, vRatio);
+
+        const centerShift_x = (mapCanvas.width - img.width * ratio) / 2;
+        const centerShift_y = (mapCanvas.height - img.height * ratio) / 2;
+
+        mapContext.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
+        mapContext.drawImage(
+          img, 0, 0, img.width, img.height,
+          centerShift_x, centerShift_y, img.width * ratio, img.height * ratio
+        );
+      }
+
+      if (mapImages[0]) mapImages[0].onload = renderMapFrame;
+      updateMapCanvasSize();
+
+      // MASTER PINNED SCROLLEYTELLING TIMELINE (#cinematic-stage)
       const masterTl = gsap.timeline({
         scrollTrigger: {
           trigger: "#cinematic-stage",
           start: "top top",
-          end: "+=580%",
-          scrub: 1,
+          end: "+=1400%",
+          scrub: 1.0,
           pin: true,
           anticipatePin: 1
         }
       });
 
-      // PHASE 1: Zoom out 1.png from scale(1.22) -> scale(1.0)
-      masterTl.to("#bg-layer-1", {
-        scale: 1.0,
+      // Scrub City Frames
+      masterTl.to(cityFrameState, {
+        frame: cityFrameCount - 1,
+        snap: "frame",
+        duration: 18.0,
         ease: "none",
-        duration: 1.5
+        onUpdate: renderCityFrame
       });
 
-      // PHASE 2: Transition Hero Text out & reveal 2.png over 1.png
-      masterTl.to("#hero-box", {
-        opacity: 0,
-        y: -40,
-        duration: 0.8
-      }, "-=0.2");
-
-      masterTl.to("#bg-layer-2", {
+      // Crossfade to Map Layer halfway through
+      masterTl.to("#bg-layer-map", {
         opacity: 1,
-        duration: 1.0,
-        ease: "power1.inOut"
-      }, "<");
+        duration: 1.5,
+        ease: "power1.inOut",
+        onStart: renderMapFrame
+      }, 14.0);
 
-      // Hide 1.png once 2.png covers screen & turn 4.png visible underneath 2.png
-      masterTl.to("#bg-layer-1", {
-        opacity: 0,
-        duration: 0.2
-      });
-
-      masterTl.to("#bg-layer-4", {
-        opacity: 1,
-        duration: 0.2
-      }, "<");
-
-      // PHASE 3: 3D CIRCULAR RING CAROUSEL REVOLUTION OVER 2.PNG!
-      // 1. Fade in 3D Ring Carousel stage
-      masterTl.to("#carousel-stage", {
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.out"
-      });
-
-      // 2. Slow zoom on 2.png while rotating the 3D ring a full 360 DEGREES in a circle!
-      masterTl.to("#bg-layer-2", {
-        scale: 1.35,
+      // Scrub Map Frames
+      masterTl.to(mapFrameState, {
+        frame: mapFrameCount - 1,
+        snap: "frame",
+        duration: 18.0,
         ease: "none",
-        duration: 6.0
-      }, "ring-revolve");
+        onUpdate: renderMapFrame
+      }, 14.0);
 
-      masterTl.to("#carousel-ring", {
-        rotateY: -360,
-        ease: "none",
-        duration: 6.0
-      }, "ring-revolve");
+      // CITY & MAP MANUSCRIPT CHAPTER SEQUENCES WITH 3S HOLD & ASH DISINTEGRATION
+      const cityChapters = [
+        { id: "#city-chapter-prologue", start: 0.5 },
+        { id: "#city-chapter-preface", start: 6.0 },
+        { id: "#city-chapter-intro", start: 12.0 },
+        { id: "#map-chapter-exp1", start: 18.0 },
+        { id: "#map-chapter-exp2", start: 24.0 }
+      ];
 
-      // 3. Fade out 3D Ring Carousel stage after complete 360-degree rotation
-      masterTl.to("#carousel-stage", {
-        opacity: 0,
-        duration: 0.8,
-        ease: "power2.in"
-      });
+      cityChapters.forEach((chap) => {
+        const el = document.querySelector(chap.id);
+        if (!el) return;
 
-      // PHASE 4: CINEMATIC RIP-OFF ANIMATION OF 2.PNG (Occurs strictly AFTER the 360° circular rotation finishes!)
-      masterTl.to("#bg-layer-2", {
-        clipPath: "polygon(100% 0, 100% 0, 100% 100%, 100% 100%)",
-        opacity: 0,
-        ease: "power2.inOut",
-        duration: 1.8
-      });
+        const textEl = el.querySelector(".manuscript-typing-text");
+        const fullText = textEl ? textEl.getAttribute("data-text") : "";
 
-      // PHASE 5: REVEAL 4.PNG AND FADE IN WORK EXPERIENCE CARDS!
-      masterTl.to("#exp-stage", {
-        opacity: 1,
-        duration: 1.2,
-        ease: "power2.out",
-        onStart: () => {
-          const expStage = document.getElementById("exp-stage");
-          if (expStage) expStage.classList.add("active");
+        // Reveal chapter
+        masterTl.to(el, {
+          opacity: 1,
+          visibility: "visible",
+          y: "-50%",
+          duration: 1.0,
+          ease: "power2.out"
+        }, chap.start);
+
+        // Typing animation
+        if (textEl && fullText) {
+          masterTl.add(createTypingTimeline(textEl, fullText, 0.02), chap.start + 0.3);
         }
-      }, ">-0.4");
 
-      // 3. ScrollTrigger reveals for subsequent sections below stage
-      gsap.utils.toArray(".resume-card").forEach((card) => {
+        // 3 SECONDS HOLD AT FULL COMPLETION, THEN ASH DISINTEGRATION REMOVAL
+        masterTl.to(el, {
+          opacity: 0,
+          letterSpacing: "14px",
+          filter: "blur(18px) brightness(180%) contrast(180%)",
+          y: "-65%",
+          color: "#e74c3c",
+          duration: 1.5,
+          ease: "power3.in",
+          onStart: () => {
+            triggerAshBurst(el);
+          },
+          onComplete: () => {
+            gsap.set(el, { visibility: "hidden", clearProps: "filter,color,letterSpacing" });
+          }
+        }, chap.start + 4.5);
+      });
+
+
+      // ========================================================
+      // 3. ROMAN COLOSSEUM RECONSTRUCTION TIMELINE (#colosseum-stage)
+      // ========================================================
+      
+      // REUSABLE CHARACTER-BY-CHARACTER TYPING ANIMATION ENGINE
+      function createTypingTimeline(element, fullText, speed = 0.03) {
+        const tl = gsap.timeline();
+        const obj = { count: 0 };
+        const contentSpan = element.querySelector(".typing-content");
+        
+        tl.to(obj, {
+          count: fullText.length,
+          duration: Math.max(1.2, fullText.length * speed),
+          ease: "none",
+          onUpdate: () => {
+            if (contentSpan) {
+              contentSpan.textContent = fullText.slice(0, Math.floor(obj.count));
+            }
+          }
+        });
+        return tl;
+      }
+
+      // 3. ROMAN COLOSSEUM MANUSCRIPT CHRONICLE TIMELINE (#colosseum-stage)
+      const colosseumTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#colosseum-stage",
+          start: "top top",
+          end: "+=1600%",
+          scrub: 1.2,
+          pin: true,
+          anticipatePin: 1
+        }
+      });
+
+      // 250-FRAME CANVAS SCROLL ENGINE
+      const frameCount = 250;
+      const currentFrame = index => `assets/frames/frame_${(index + 1).toString().padStart(3, '0')}.jpg`;
+
+      const images = [];
+      const colosseumFrameState = { frame: 0 };
+
+      for (let i = 0; i < frameCount; i++) {
+        const img = new Image();
+        img.src = currentFrame(i);
+        images.push(img);
+      }
+
+      const colosseumCanvas = document.getElementById("colosseum-canvas");
+      const colosseumContext = colosseumCanvas ? colosseumCanvas.getContext("2d") : null;
+
+      function updateCanvasSize() {
+        if (!colosseumCanvas) return;
+        colosseumCanvas.width = window.innerWidth;
+        colosseumCanvas.height = window.innerHeight;
+        renderFrame();
+      }
+      window.addEventListener("resize", updateCanvasSize);
+
+      function renderFrame() {
+        if (!colosseumCanvas || !colosseumContext || !images[colosseumFrameState.frame]) return;
+        const img = images[colosseumFrameState.frame];
+        if (!img.complete) return;
+
+        const hRatio = colosseumCanvas.width / img.width;
+        const vRatio = colosseumCanvas.height / img.height;
+        const ratio = Math.max(hRatio, vRatio);
+
+        const centerShift_x = (colosseumCanvas.width - img.width * ratio) / 2;
+        const centerShift_y = (colosseumCanvas.height - img.height * ratio) / 2;
+
+        colosseumContext.clearRect(0, 0, colosseumCanvas.width, colosseumCanvas.height);
+        colosseumContext.drawImage(
+          img, 0, 0, img.width, img.height,
+          centerShift_x, centerShift_y, img.width * ratio, img.height * ratio
+        );
+      }
+
+      if (images[0]) images[0].onload = renderFrame;
+      updateCanvasSize();
+
+      // STEP 1: FADE IN COLOSSEUM ENVIRONMENT & SCRUB 250 FRAMES OVER THE MANUSCRIPT CHRONICLE
+      colosseumTl.fromTo("#colosseum-stone-layer", 
+        { opacity: 0, scale: 1.08 },
+        { opacity: 1, scale: 1.0, duration: 1.5, ease: "power2.out", onStart: renderFrame }
+      );
+
+      colosseumTl.to(".sunlight-beam", {
+        opacity: 0.8,
+        duration: 1.5
+      }, "<");
+
+      colosseumTl.to(colosseumFrameState, {
+        frame: frameCount - 1,
+        snap: "frame",
+        duration: 35.0,
+        ease: "none",
+        onUpdate: renderFrame
+      }, "<");
+
+      // ==========================================
+      // MANUSCRIPT CHRONICLE SEQUENTIAL CHAPTERS
+      // ==========================================
+
+      const chapters = [
+        { id: "#chapter-prologue", start: 0.5 },
+        { id: "#chapter-preface", start: 6.5 },
+        { id: "#chapter-1", start: 12.5 },
+        { id: "#chapter-2", start: 18.5 },
+        { id: "#chapter-3", start: 24.5 },
+        { id: "#chapter-epilogue", start: 30.5 }
+      ];
+
+      chapters.forEach((chap) => {
+        const el = document.querySelector(chap.id);
+        if (!el) return;
+
+        const textEl = el.querySelector(".manuscript-typing-text");
+        const fullText = textEl ? textEl.getAttribute("data-text") : "";
+
+        // Reveal chapter
+        colosseumTl.to(el, {
+          opacity: 1,
+          visibility: "visible",
+          y: "-50%",
+          duration: 1.0,
+          ease: "power2.out"
+        }, chap.start);
+
+        // Typing animation
+        if (textEl && fullText) {
+          colosseumTl.add(createTypingTimeline(textEl, fullText, 0.02), chap.start + 0.3);
+        }
+
+        // 3 SECONDS HOLD AT FULL COMPLETION, THEN ASH DISINTEGRATION REMOVAL
+        colosseumTl.to(el, {
+          opacity: 0,
+          letterSpacing: "14px",
+          filter: "blur(18px) brightness(180%) contrast(180%)",
+          y: "-65%",
+          color: "#e74c3c",
+          duration: 1.5,
+          ease: "power3.in",
+          onStart: () => {
+            triggerAshBurst(el);
+          },
+          onComplete: () => {
+            gsap.set(el, { visibility: "hidden", clearProps: "filter,color,letterSpacing" });
+          }
+        }, chap.start + 4.5);
+      });
+
+
+      // 4. Dust Canvas Ambient Particles Generator
+      const canvas = document.getElementById("colosseum-dust-canvas");
+      if (canvas) {
+        const ctx = canvas.getContext("2d");
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener("resize", () => {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        });
+
+        const particles = Array.from({ length: 45 }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 2 + 0.5,
+          alpha: Math.random() * 0.6 + 0.2,
+          speedY: - (Math.random() * 0.4 + 0.1),
+          speedX: (Math.random() - 0.5) * 0.3
+        }));
+
+        function animateDust() {
+          ctx.clearRect(0, 0, width, height);
+          particles.forEach(p => {
+            p.y += p.speedY;
+            p.x += p.speedX;
+            if (p.y < 0) p.y = height;
+            if (p.x < 0) p.x = width;
+            if (p.x > width) p.x = 0;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(247, 215, 116, ${p.alpha})`;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = "rgba(247, 215, 116, 0.8)";
+            ctx.fill();
+          });
+          requestAnimationFrame(animateDust);
+        }
+        animateDust();
+      }
+
+      // 5. ScrollTrigger Pinned Scrollytelling: Section pins at top -> starts empty -> scroll brings cards 1-by-1 from left
+      const showcaseTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#architectural-showcase-section",
+          start: "top top",
+          end: "+=180%",
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1
+        }
+      });
+
+      showcaseTl.fromTo("#showcase-card-1", 
+        { x: -380, opacity: 0, scale: 0.85, filter: "blur(12px)" },
+        { x: 0, opacity: 1, scale: 1.0, filter: "blur(0px)", duration: 1.2, ease: "power2.out" }
+      );
+
+      showcaseTl.fromTo("#showcase-card-2", 
+        { x: -380, opacity: 0, scale: 0.85, filter: "blur(12px)" },
+        { x: 0, opacity: 1, scale: 1.0, filter: "blur(0px)", duration: 1.2, ease: "power2.out" },
+        "+=0.3"
+      );
+
+      showcaseTl.fromTo("#showcase-card-3", 
+        { x: -380, opacity: 0, scale: 0.85, filter: "blur(12px)" },
+        { x: 0, opacity: 1, scale: 1.0, filter: "blur(0px)", duration: 1.2, ease: "power2.out" },
+        "+=0.3"
+      );
+
+      // 6. ScrollTrigger reveals for subsequent sections
+      gsap.utils.toArray(".resume-card, .skill-box").forEach((card) => {
         gsap.from(card, {
           scrollTrigger: {
             trigger: card,
@@ -832,7 +1716,7 @@
         });
       });
 
-      // 4. ScrollTrigger reveal for coins banner
+      // 6. ScrollTrigger reveal for coins banner
       gsap.from("#coins-banner-box", {
         scrollTrigger: {
           trigger: "#coins-banner-box",
