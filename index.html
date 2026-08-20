@@ -15,7 +15,32 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
+  <!-- Lenis Smooth Scroll Library -->
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.18/dist/lenis.css">
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
   <style>
+    /* Recommended Lenis Smooth Scroll Rules */
+    html.lenis, html.lenis body {
+      height: auto;
+    }
+
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+
+    .lenis.lenis-smooth [data-lenis-prevent] {
+      overscroll-behavior: contain;
+    }
+
+    .lenis.lenis-stopped {
+      overflow: hidden;
+    }
+
+    .lenis.lenis-smooth iframe {
+      pointer-events: none;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -278,6 +303,26 @@
       font-size: 0.75rem;
       color: #ff7675;
       margin: 0.2rem 0.2rem 0.2rem 0;
+    }
+
+    /* ========================================================
+       FIGHT SEQUENCE STAGE (FROM FIGHT.MP4 FRAMES)
+       ======================================================== */
+    .fight-stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #060508;
+    }
+
+    .fight-canvas-media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      filter: contrast(1.08) brightness(1.03) saturate(1.05);
     }
 
     /* ========================================================
@@ -878,6 +923,60 @@
       color: #c4b49c;
     }
 
+    /* Education & Achievements Grid Cards */
+    .grid-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .edu-card {
+      background: rgba(18, 14, 22, 0.85);
+      border: 1px solid rgba(217, 172, 71, 0.3);
+      border-radius: 14px;
+      padding: 1.8rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+      transition: all 0.3s ease;
+    }
+
+    .edu-card:hover {
+      border-color: #f7d774;
+      transform: translateY(-5px);
+      box-shadow: 0 20px 45px rgba(217, 172, 71, 0.25);
+    }
+
+    .card-date {
+      font-size: 0.75rem;
+      color: #d9ac47;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      color: #ffffff;
+      margin-bottom: 0.4rem;
+      line-height: 1.2;
+    }
+
+    .card-sub {
+      font-size: 0.9rem;
+      color: #f7d774;
+      margin-bottom: 0.8rem;
+      font-style: italic;
+    }
+
+    .card-text {
+      font-size: 0.9rem;
+      color: #c4b49c;
+      line-height: 1.6;
+    }
+
     /* Falling Gold Coins Banner (3.png) */
     .coins-banner {
       width: 100%;
@@ -911,6 +1010,19 @@
     footer a {
       color: #f7d774;
       text-decoration: none;
+    }
+
+    /* HIDE ALL TEXT OVERLAYS & HEADINGS (IMAGE-ONLY MODE) */
+    .hero-text-box,
+    .manuscript-stage,
+    .monument-title-box,
+    .showcase-card-overlay,
+    .section-header,
+    #skills-section,
+    .grid-cards,
+    footer p,
+    #audio-btn-label {
+      display: none !important;
     }
 
     /* FLOATING AUDIO CONTROLLER WIDGET */
@@ -1159,6 +1271,17 @@
 
 
   <!-- ========================================================
+     FIGHT SEQUENCE STAGE (250-FRAME SEQUENCE FROM FIGHT.MP4)
+     ======================================================== -->
+  <div class="fight-stage" id="fight-stage">
+    <div class="bg-layer" id="bg-layer-fight" style="z-index: 10; opacity: 1; background: #060508; overflow: hidden;">
+      <canvas id="fight-canvas" class="fight-canvas-media"></canvas>
+    </div>
+    <div class="stage-overlay"></div>
+  </div>
+
+
+  <!-- ========================================================
      ARCHITECTURAL SYSTEM SHOWCASE (6.PNG, 7.PNG, 8.PNG IN 1 ROW)
      ======================================================== -->
   <section class="section-container" id="architectural-showcase-section">
@@ -1216,7 +1339,7 @@
     <h2 class="section-header">Education & Achievements</h2>
 
     <div class="grid-cards">
-      <div class="resume-card">
+      <div class="edu-card">
         <div class="card-date">2023 – PRESENT</div>
         <h3 class="card-title">B.Tech AI & Data Science (Honours)</h3>
         <div class="card-sub">DKTE Society’s Textile & Engineering Institute</div>
@@ -1225,7 +1348,7 @@
         </p>
       </div>
 
-      <div class="resume-card">
+      <div class="edu-card">
         <div class="card-date">HONORS & CERTIFICATIONS</div>
         <h3 class="card-title">1st Place Hack AI Blitz 2025</h3>
         <div class="card-sub">Microsoft Learn Students' Club</div>
@@ -1253,6 +1376,104 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       gsap.registerPlugin(ScrollTrigger);
+
+      // INITIALIZE LENIS SMOOTH SCROLL ENGINE & SYNC WITH GSAP TICKER
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: "vertical",
+        gestureOrientation: "vertical",
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+        smoothTouch: false,
+        touchMultiplier: 2,
+        infinite: false
+      });
+
+      window.lenis = lenis;
+
+      lenis.on("scroll", ScrollTrigger.update);
+
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+
+      gsap.ticker.lagSmoothing(0);
+
+      // FLOATING ASH & EMBER PARTICLE BURST ENGINE FOR CINEMATIC DISINTEGRATION
+      const ashCanvas = document.getElementById("ash-canvas");
+      const ashCtx = ashCanvas ? ashCanvas.getContext("2d") : null;
+      let ashParticles = [];
+
+      if (ashCanvas && ashCtx) {
+        function resizeAshCanvas() {
+          ashCanvas.width = window.innerWidth;
+          ashCanvas.height = window.innerHeight;
+        }
+        window.addEventListener("resize", resizeAshCanvas);
+        resizeAshCanvas();
+
+        // Ambient floating ash particles
+        for (let i = 0; i < 40; i++) {
+          ashParticles.push({
+            x: Math.random() * ashCanvas.width,
+            y: Math.random() * ashCanvas.height,
+            size: Math.random() * 2 + 0.5,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: - (Math.random() * 0.5 + 0.2),
+            alpha: Math.random() * 0.6 + 0.2,
+            color: Math.random() > 0.4 ? "231, 76, 60" : "247, 215, 116"
+          });
+        }
+
+        function renderAsh() {
+          ashCtx.clearRect(0, 0, ashCanvas.width, ashCanvas.height);
+          for (let i = ashParticles.length - 1; i >= 0; i--) {
+            const p = ashParticles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.isBurst) {
+              p.alpha -= 0.012;
+            }
+
+            if (p.y < 0 || p.alpha <= 0) {
+              if (p.isBurst) {
+                ashParticles.splice(i, 1);
+                continue;
+              } else {
+                p.y = ashCanvas.height;
+                p.x = Math.random() * ashCanvas.width;
+              }
+            }
+
+            ashCtx.beginPath();
+            ashCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ashCtx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
+            ashCtx.shadowBlur = p.isBurst ? 10 : 4;
+            ashCtx.shadowColor = `rgba(${p.color}, 0.8)`;
+            ashCtx.fill();
+          }
+          requestAnimationFrame(renderAsh);
+        }
+        renderAsh();
+      }
+
+      window.triggerAshBurst = function(el) {
+        if (!ashCanvas || !el) return;
+        const rect = el.getBoundingClientRect();
+        for (let i = 0; i < 35; i++) {
+          ashParticles.push({
+            x: rect.left + Math.random() * rect.width,
+            y: rect.top + Math.random() * rect.height,
+            size: Math.random() * 3 + 1,
+            vx: (Math.random() - 0.5) * 2.5,
+            vy: - (Math.random() * 2 + 0.8),
+            alpha: 1.0,
+            isBurst: true,
+            color: Math.random() > 0.3 ? "231, 76, 60" : "247, 215, 116"
+          });
+        }
+      };
 
       // BACKGROUND AUDIO AUTOMATIC LOOP ENGINE & USER GESTURE UNLOCK
       const bgAudio = document.getElementById("bg-audio");
@@ -1631,6 +1852,75 @@
       });
 
 
+      // ========================================================
+      // 4. FIGHT CANVAS SCROLL PRELOADER & RENDER ENGINE (#fight-stage)
+      // ========================================================
+      const fightFrameCount = 250;
+      const currentFightFrame = index => `assets/fight_frames/frame_${(index + 1).toString().padStart(3, '0')}.jpg`;
+
+      const fightImages = [];
+      const fightFrameState = { frame: 0 };
+
+      for (let i = 0; i < fightFrameCount; i++) {
+        const img = new Image();
+        img.src = currentFightFrame(i);
+        fightImages.push(img);
+      }
+
+      const fightCanvas = document.getElementById("fight-canvas");
+      const fightContext = fightCanvas ? fightCanvas.getContext("2d") : null;
+
+      function updateFightCanvasSize() {
+        if (!fightCanvas) return;
+        fightCanvas.width = window.innerWidth;
+        fightCanvas.height = window.innerHeight;
+        renderFightFrame();
+      }
+      window.addEventListener("resize", updateFightCanvasSize);
+
+      function renderFightFrame() {
+        if (!fightCanvas || !fightContext || !fightImages[fightFrameState.frame]) return;
+        const img = fightImages[fightFrameState.frame];
+        if (!img.complete) return;
+
+        const hRatio = fightCanvas.width / img.width;
+        const vRatio = fightCanvas.height / img.height;
+        const ratio = Math.max(hRatio, vRatio);
+
+        const centerShift_x = (fightCanvas.width - img.width * ratio) / 2;
+        const centerShift_y = (fightCanvas.height - img.height * ratio) / 2;
+
+        fightContext.clearRect(0, 0, fightCanvas.width, fightCanvas.height);
+        fightContext.drawImage(
+          img, 0, 0, img.width, img.height,
+          centerShift_x, centerShift_y, img.width * ratio, img.height * ratio
+        );
+      }
+
+      if (fightImages[0]) fightImages[0].onload = renderFightFrame;
+      updateFightCanvasSize();
+
+      // FIGHT PINNED SCROLLEYTELLING TIMELINE (#fight-stage)
+      const fightTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#fight-stage",
+          start: "top top",
+          end: "+=1400%",
+          scrub: 1.0,
+          pin: true,
+          anticipatePin: 1
+        }
+      });
+
+      fightTl.to(fightFrameState, {
+        frame: fightFrameCount - 1,
+        snap: "frame",
+        duration: 20.0,
+        ease: "none",
+        onUpdate: renderFightFrame
+      });
+
+
       // 4. Dust Canvas Ambient Particles Generator
       const canvas = document.getElementById("colosseum-dust-canvas");
       if (canvas) {
@@ -1703,7 +1993,7 @@
       );
 
       // 6. ScrollTrigger reveals for subsequent sections
-      gsap.utils.toArray(".resume-card, .skill-box").forEach((card) => {
+      gsap.utils.toArray(".edu-card, .skill-box").forEach((card) => {
         gsap.from(card, {
           scrollTrigger: {
             trigger: card,
